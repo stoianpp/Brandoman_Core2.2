@@ -10,6 +10,7 @@
     using Brandoman.Data.Models;
     using Brandoman.Data.Repositories;
     using Brandoman.Data.Seeding;
+    using Brandoman.Services;
     using Brandoman.Services.Data;
     using Brandoman.Services.Mapping;
     using Brandoman.Services.Messaging;
@@ -45,8 +46,7 @@
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
-            var jwtSettingsSection =
-                this.configuration.GetSection("JwtSettings");
+            var jwtSettingsSection = this.configuration.GetSection("JwtSettings");
             services.Configure<JwtSettings>(jwtSettingsSection);
 
             // Configure JWT authentication
@@ -70,11 +70,12 @@
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
             services
-                .AddAuthentication(options =>
+                .AddAuthentication() /*options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+                }*/
+                .AddCookie(cfg => cfg.SlidingExpiration = true)
                 .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
@@ -133,6 +134,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<ILoginService, LoginService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

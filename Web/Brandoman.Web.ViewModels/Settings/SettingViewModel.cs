@@ -1,9 +1,8 @@
 ﻿namespace Brandoman.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using Brandoman.Data.Models;
     using Brandoman.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

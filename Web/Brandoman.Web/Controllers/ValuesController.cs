@@ -8,6 +8,9 @@
 
     using Brandoman.Data;
     using Brandoman.Data.Common.Models;
+    using Brandoman.Services;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -15,15 +18,21 @@
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ValuesController : ControllerBase
     {
         private readonly IOptions<JwtSettings> options;
         private readonly ApplicationDbContext context;
+        private readonly ILoginService loginService;
 
-        public ValuesController(IOptions<JwtSettings> options, ApplicationDbContext context)
+        public ValuesController(
+            IOptions<JwtSettings> options,
+            ApplicationDbContext context,
+            ILoginService loginService)
         {
             this.options = options;
             this.context = context;
+            this.loginService = loginService;
         }
 
         // GET api/values
@@ -33,54 +42,18 @@
             return this.options.Value.Secret;
         }
 
-        // GET api/values
-        [HttpGet("[action]")]
-        public ActionResult<string> WhoAmI()
-        {
-            return "user: " + this.User.Identity.Name;
-        }
-
-        // GET api/values
+        // GET api/values/login
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public ActionResult<string> Login(string username, string password)
         {
-            var users = this.context.Users;
-            var user = users.SingleOrDefault(x => x.UserName == username);
-            if (user == null)
+            var result = this.loginService.GetToken(this.context.Users, username, password);
+            if (result == null)
             {
-                return null;
+                return this.BadRequest("Could not create token");
             }
 
-            if (user != null)
-            {
-                var hasher = new PasswordHasher<IdentityUser>();
-                if (hasher.VerifyHashedPassword(user, user.PasswordHash, password)
-                    == PasswordVerificationResult.Failed)
-                {
-                    return null; // Return null if user not found
-                }
-            }
-
-            var secret = this.options.Value.Secret;
-            var key = Encoding.UTF8.GetBytes(secret);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, "admin"),
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(
-                                new SymmetricSecurityKey(key),
-                                SecurityAlgorithms.HmacSha256Signature),
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwt = tokenHandler.WriteToken(token);
-
-            return jwt;
+            return this.Ok(new { token = result });
         }
 
         // GET api/values/5
