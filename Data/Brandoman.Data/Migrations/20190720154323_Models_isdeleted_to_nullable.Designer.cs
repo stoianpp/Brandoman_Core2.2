@@ -4,14 +4,16 @@ using Brandoman.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Brandoman.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190720154323_Models_isdeleted_to_nullable")]
+    partial class Models_isdeleted_to_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,11 +27,11 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -50,13 +52,13 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<int>("BrandId");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<byte[]>("Image");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -77,11 +79,11 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -104,7 +106,7 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -112,7 +114,7 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<byte[]>("Image");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -139,11 +141,11 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<int>("Lang");
 
@@ -172,13 +174,13 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<byte[]>("Image");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -201,11 +203,11 @@ namespace Brandoman.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -237,7 +239,7 @@ namespace Brandoman.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -246,7 +248,7 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<int>("Lang");
 
@@ -296,11 +298,11 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<bool>("IsDeleted");
+                    b.Property<bool?>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 

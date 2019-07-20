@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Brandoman.Data.Common.Models;
+    using Brandoman.Data.Common.Models.DBModels;
     using Brandoman.Data.Models;
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,6 +26,18 @@
         }
 
         public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<Brand> Brands { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<LoginLog> LoginLogs { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductLang> ProductLangs { get; set; }
+
+        public DbSet<SubCategory> SubCategories { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

@@ -4,14 +4,16 @@ using Brandoman.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Brandoman.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190720152556_models_createdon_to_nullable")]
+    partial class Models_createdon_to_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,7 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -50,7 +52,7 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<int>("BrandId");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -77,7 +79,7 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -104,7 +106,7 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -139,7 +141,7 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -172,7 +174,7 @@ namespace Brandoman.Data.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -201,7 +203,7 @@ namespace Brandoman.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -237,7 +239,7 @@ namespace Brandoman.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -296,7 +298,7 @@ namespace Brandoman.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedOn");
+                    b.Property<DateTime?>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
