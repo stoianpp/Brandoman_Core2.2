@@ -1,36 +1,25 @@
 ﻿namespace Brandoman.Web.Controllers
 {
-    using System;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Text;
-
     using Brandoman.Data;
     using Brandoman.Data.Common.Models;
     using Brandoman.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
-    using Microsoft.IdentityModel.Tokens;
 
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ValuesController : ControllerBase
     {
-        private readonly IOptions<JwtSettings> options;
         private readonly ApplicationDbContext context;
         private readonly ILoginService loginService;
 
         public ValuesController(
-            IOptions<JwtSettings> options,
             ApplicationDbContext context,
             ILoginService loginService)
         {
-            this.options = options;
             this.context = context;
             this.loginService = loginService;
         }
@@ -39,7 +28,7 @@
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return this.options.Value.Secret;
+            return "123";
         }
 
         // GET api/values/login

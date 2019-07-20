@@ -1,8 +1,10 @@
 ﻿namespace Brandoman.Web
 {
+    using System;
     using System.Reflection;
     using System.Text;
 
+    using AutoMapper;
     using Brandoman.Data;
     using Brandoman.Data.Common;
     using Brandoman.Data.Common.Models;
@@ -69,6 +71,7 @@
                 .AddRoles<ApplicationRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
+            // services.AddAutoMapper();
             services
                 .AddAuthentication() /*options =>
                 {
