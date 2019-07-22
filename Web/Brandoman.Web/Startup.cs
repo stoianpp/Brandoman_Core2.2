@@ -10,14 +10,14 @@
     using Brandoman.Data.Common.Models;
     using Brandoman.Data.Common.Repositories;
     using Brandoman.Data.Models;
+    using Brandoman.Data.Models.ViewModels;
     using Brandoman.Data.Repositories;
     using Brandoman.Data.Seeding;
     using Brandoman.Services;
-    using Brandoman.Services.Data;
+    using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Mapping;
     using Brandoman.Services.Messaging;
     using Brandoman.Web.ViewModels;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -41,6 +41,7 @@
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             // Framework services
@@ -71,7 +72,8 @@
                 .AddRoles<ApplicationRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
-            // services.AddAutoMapper();
+            services.AddAutoMapper();
+
             services
                 .AddAuthentication() /*options =>
                 {
@@ -138,12 +140,13 @@
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ILoginService, LoginService>();
+            services.AddTransient<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(AdminIndexViewModel).GetTypeInfo().Assembly, typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())

@@ -1,5 +1,7 @@
-﻿namespace Brandoman.Data.Common.Models.DBModels
+﻿namespace Brandoman.Data.Models
 {
+    using Brandoman.Data.Common.Models;
+
     public class ProductLang : BaseDeletableModel<int>
     {
         public Lang Lang { get; set; }

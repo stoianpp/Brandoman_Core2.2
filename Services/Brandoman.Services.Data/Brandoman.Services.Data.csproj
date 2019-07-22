@@ -21,16 +21,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Brandoman.Data.Common\Brandoman.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Brandoman.Data.Models\Brandoman.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\Brandoman.Web.ViewModels\Brandoman.Web.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.IdentityModel.Tokens.Jwt">
       <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\system.identitymodel.tokens.jwt\5.3.0\lib\netstandard2.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Products\" />
   </ItemGroup>
 
 </Project>

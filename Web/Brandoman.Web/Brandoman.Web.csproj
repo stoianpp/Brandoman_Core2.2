@@ -40,4 +40,8 @@
     <ProjectReference Include="..\Brandoman.Web.Infrastructure\Brandoman.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Brandoman.Web.ViewModels\Brandoman.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\jqueryui\" />
+  </ItemGroup>
 </Project>

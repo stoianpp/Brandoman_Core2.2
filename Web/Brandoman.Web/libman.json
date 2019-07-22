@@ -11,6 +11,10 @@
       ]
     },
     {
+      "library": "jqueryui@1.11.1",
+      "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
       "library": "bootstrap@4.3.1",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [

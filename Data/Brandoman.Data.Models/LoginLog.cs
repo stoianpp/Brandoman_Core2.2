@@ -1,5 +1,7 @@
-﻿namespace Brandoman.Data.Common.Models.DBModels
+﻿namespace Brandoman.Data.Models
 {
+    using Brandoman.Data.Common.Models;
+
     public class LoginLog : BaseDeletableModel<int>
     {
         public string UserId { get; set; }

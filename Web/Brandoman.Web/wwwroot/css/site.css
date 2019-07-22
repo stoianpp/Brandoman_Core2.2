@@ -54,3 +54,102 @@ body {
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
 }
+
+
+.sidebar-nav {
+    padding-top: 30px
+}
+
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+    }
+
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+
+        .sidebar-nav .navbar li a {
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+
+a:hover {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-decoration: none !important
+}
+
+.button-width {
+    min-width: 75px;
+    margin-top: 3px
+}
+
+#confirmOk, #confirmOrderOk {
+    margin-right: 10px
+}
+
+#confirmOk {
+    margin-right: 10px
+}
+
+input.edit {
+    font-weight: bold;
+    color: #333;
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+    background-image: url('../images/edit-pencil.png');
+}
+
+input.delete {
+    font-weight: bold;
+    color: #333;
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+    background-image: url('../images/del25.png');
+}
+
+img.icon {
+    width: 25px;
+    height: 25px
+}
+
+.mycheckbox {
+    height: 25px
+}
+
+.my-control {
+    max-width: none
+}
+
+.table td {
+    padding: 0.25rem
+}
+
+.card-header {
+    padding: 0.20rem 0.75rem;
+}
+
+.nav .active {
+    background-color: lightgrey;
+    border-color: lightgrey;
+}
+
+nav.navbar a:hover {
+    padding: 7px !important;
+}
+
+nav.navbar .dropdown-menu a:hover {
+    padding-left: 25px !important;
+    font-weight: bolder
+}

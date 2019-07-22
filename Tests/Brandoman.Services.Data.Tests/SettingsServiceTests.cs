@@ -8,7 +8,7 @@
     using Brandoman.Data.Common.Repositories;
     using Brandoman.Data.Models;
     using Brandoman.Data.Repositories;
-
+    using Brandoman.Services.Data.Interfaces;
     using Microsoft.EntityFrameworkCore;
 
     using Moq;

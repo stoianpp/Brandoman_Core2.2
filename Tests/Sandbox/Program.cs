@@ -11,6 +11,7 @@
     using Brandoman.Data.Repositories;
     using Brandoman.Data.Seeding;
     using Brandoman.Services.Data;
+    using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Messaging;
 
     using CommandLine;

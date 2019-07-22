@@ -1,4 +1,4 @@
-﻿namespace Brandoman.Services.Data
+﻿namespace Brandoman.Services.Data.Interfaces
 {
     using System.Linq;
 

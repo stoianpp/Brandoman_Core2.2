@@ -1,6 +1,8 @@
-﻿namespace Brandoman.Data.Common.Models.DBModels
+﻿namespace Brandoman.Data.Models
 {
     using System.Collections.Generic;
+
+    using Brandoman.Data.Common.Models;
 
     public class SubCategory : BaseDeletableModel<int>
     {

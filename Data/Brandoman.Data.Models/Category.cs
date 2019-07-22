@@ -1,14 +1,16 @@
-﻿namespace Brandoman.Data.Common.Models.DBModels
+﻿namespace Brandoman.Data.Models
 {
     using System.Collections.Generic;
 
+    using Brandoman.Data.Common.Models;
+
     public class Category : BaseDeletableModel<int>
     {
-
         public Category()
         {
             this.SubCategories = new HashSet<SubCategory>();
         }
+
         public string Name { get; set; }
 
         public byte[] Image { get; set; }

@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
 
     using Brandoman.Data.Common.Models;
-    using Brandoman.Data.Common.Models.DBModels;
     using Brandoman.Data.Models;
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

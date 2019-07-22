@@ -1,6 +1,6 @@
 ﻿namespace Brandoman.Web.Areas.Administration.Controllers
 {
-    using Brandoman.Services.Data;
+    using Brandoman.Services.Data.Interfaces;
     using Brandoman.Web.Areas.Administration.ViewModels.Dashboard;
 
     using Microsoft.AspNetCore.Mvc;
