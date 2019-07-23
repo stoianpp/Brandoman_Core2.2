@@ -81,8 +81,6 @@ body {
         }
 
 a:hover {
-    padding-top: 12px;
-    padding-bottom: 12px;
     text-decoration: none !important
 }
 
@@ -143,10 +141,6 @@ img.icon {
 .nav .active {
     background-color: lightgrey;
     border-color: lightgrey;
-}
-
-nav.navbar a:hover {
-    padding: 7px !important;
 }
 
 nav.navbar .dropdown-menu a:hover {

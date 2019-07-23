@@ -1,0 +1,18 @@
+﻿@using Brandoman.Data.Models.ViewModels
+
+@if (ViewBag.SubCategories != null)
+{
+    <ul class="nav list-group">
+        @foreach (SubCategoryDropDownViewModel item in ViewBag.SubCategories)
+        {
+            var active = ((int)ViewBag.CurrentSubCategoryId) == item.Id;
+
+            var act = (bool)active ? "list-group-item active" : "list-group-item";
+
+            var subCat = item.Name;
+
+            <li class="@act">@Html.ActionLink(subCat, "Index", "Home", new { active_subCategory = item.Id }, new { style = "font-weight: bold; color: black" })</li>
+            <hr style="margin-top:1px; margin-bottom:1px" />
+        }
+    </ul>
+}

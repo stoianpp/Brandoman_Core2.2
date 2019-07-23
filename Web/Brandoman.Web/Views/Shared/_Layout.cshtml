@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Brandoman.Data.Models.ViewModels
+@using Brandoman.Services.Data.Interfaces
+
+@inject ICategoryService  catService
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -18,7 +23,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Brandoman</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -29,27 +34,69 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
+                        @*@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-light dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="" asp-action="">
+                                    Database
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateBase">Update Base</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update English</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update Bulgarian</a>
+                                </div>
+                            </li>
+                            }*@
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            List<CategoryDropDownViewModel> categories = catService.GetAllCategories().ToList();
+                            @if (categories.Count > 0)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-light dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="" asp-action="">
+                                        Category
+                                        <span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        @foreach (CategoryDropDownViewModel item in categories)
+                                        {
+                                            <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-active_category="@item.Id">@item.Name</a>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        }
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
-            @this.RenderBody()
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sidebar-nav nav">
+                        <partial name="_SideBar" />
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @this.RenderBody()
+                </div>
+            </div>
         </main>
     </div>
-    
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; @DateTime.Now.Year - Brandoman - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

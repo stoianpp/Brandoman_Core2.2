@@ -9,17 +9,37 @@
     public class HomeController : BaseController
     {
         private readonly IProductService productService;
+        private readonly ICategoryService categoryService;
 
-        public HomeController(IProductService productServiceIn)
+        public HomeController(IProductService productServiceIn, ICategoryService categoryServiceIn)
         {
             this.productService = productServiceIn;
+            this.categoryService = categoryServiceIn;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? active_category, int? active_subCategory)
         {
+            if (active_subCategory != null && active_category == null)
+            {
+                active_category = this.categoryService.GetCategoryFromSubCategory((int)active_subCategory);
+            }
+            else if (active_subCategory == null && active_category == null)
+            {
+                active_category = this.categoryService.GetInitialCategory();
+                active_subCategory = this.categoryService.GetInitialSubCategory((int)active_category);
+            }
+            else if (active_category != null && active_subCategory == null)
+            {
+                active_subCategory = this.categoryService.GetInitialSubCategory((int)active_category);
+            }
+
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                var products = this.productService.GetAllAdminActiveProducts();
+                this.ViewBag.SubCategories = this.categoryService.GetAllSubCategories((int)active_category);
+                this.ViewBag.CurrentSubCategoryId = active_subCategory;
+                this.ViewBag.CurrentCategoryId = active_category;
+
+                var products = this.productService.GetAllAdminActiveProducts(active_subCategory != null ? (int)active_subCategory : -1);
                 return this.View("Admin", products);
             }
 

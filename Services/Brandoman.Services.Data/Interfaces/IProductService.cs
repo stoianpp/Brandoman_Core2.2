@@ -6,6 +6,6 @@
 
     public interface IProductService
     {
-        IQueryable<AdminIndexViewModel> GetAllAdminActiveProducts();
+        IQueryable<AdminIndexViewModel> GetAllAdminActiveProducts(int active_subCategory);
     }
 }

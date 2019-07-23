@@ -14,6 +14,7 @@
     using Brandoman.Data.Repositories;
     using Brandoman.Data.Seeding;
     using Brandoman.Services;
+    using Brandoman.Services.Data;
     using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Mapping;
     using Brandoman.Services.Messaging;
@@ -141,6 +142,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
