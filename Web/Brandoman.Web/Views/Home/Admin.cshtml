@@ -10,7 +10,7 @@
 @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
     <div class="container">
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { style = "padding-top:30px" }))
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { style = "padding-top:30px; min-height:600px" }))
         {
             <div class="row">
                 <div class="col-md-12">
