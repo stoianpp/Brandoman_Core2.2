@@ -27,5 +27,10 @@
 
             return viewModels;
         }
+
+        public Product GetProductById(int id)
+        {
+            return this.productRepository.All().FirstOrDefault(x => x.Id == id);
+        }
     }
 }

@@ -10,8 +10,7 @@
 @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
     <div class="container">
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { style = "padding-top:30px; min-height:600px" }))
-        {
+        <form asp-controller="" asp-action="" method="post" style="padding-top:30px; min-height:600px">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -66,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            /*It’s a pop up for Delete*/
+            @*It’s a pop up for Delete*@
             <div class="modal fade" id="myModal1" role="dialog">
                 <div class="modal-dialog">
                     <!-- Modal content-->
@@ -85,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            /*It’s a pop up for Save New Order*/
+            @*It’s a pop up for Save New Order*@
             <div class="modal fade" id="myModal2" role="dialog">
                 <div class="modal-dialog">
                     <!-- Modal content-->
@@ -104,6 +103,6 @@
                     </div>
                 </div>
             </div>
-        }
+        </form>
     </div>
 }
