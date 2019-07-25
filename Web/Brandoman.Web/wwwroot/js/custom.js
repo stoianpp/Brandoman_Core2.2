@@ -21,11 +21,12 @@
         backdrop: 'static',
 keyboard: false
 })
-        .on('click', '#confirmOk', function (e) {
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("DeleteRecord", "Product")',
-            data: '{id: ' + id + '}',
+            .on('click', '#confirmOk', function (e) {
+                console.log(id);
+                $.ajax({
+                    type: "POST",
+                    url: "Product/DeleteRecord?id="+id,
+                    data: '{id: ' + id + '}',
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (success) {

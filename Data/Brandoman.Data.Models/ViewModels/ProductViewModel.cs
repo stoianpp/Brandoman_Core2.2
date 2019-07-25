@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+    using AutoMapper;
     using Brandoman.Services.Mapping;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -28,14 +29,11 @@
 
         public int Order { get; set; }
 
-        [Display(Name = "Translation")]
-        public string LangText { get; set; }
-
         public bool Active { get; set; }
 
         public bool IsUpdate { get; set; }
 
-        void IHaveCustomMappings.CreateMappings(AutoMapper.IProfileExpression configuration)
+        public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Product, ProductViewModel>()
                 .ForMember(x => x.SubCategory, opt => opt.MapFrom(x => x.SubCategory.Name));

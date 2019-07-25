@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0",
   "defaultProvider": "unpkg",
   "libraries": [
@@ -39,6 +39,16 @@
         "dist/jquery.validate.unobtrusive.js",
         "dist/jquery.validate.unobtrusive.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "summernote@0.8.12",
+      "destination": "wwwroot/lib/summernote/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "popper.js@1.15.0",
+      "destination": "wwwroot/lib/popper.js/"
     }
   ]
 }

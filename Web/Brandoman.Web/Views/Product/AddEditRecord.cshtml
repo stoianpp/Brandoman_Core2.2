@@ -5,7 +5,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">@ViewBag.Message</h4>
             </div>
-            <form asp-controller="" asp-action="" method="post" class="form-horizontal" id="ModalForm" enctype = "multipart/form-data">
+            <form asp-controller="Product" asp-action="AddEditRecord" method="post" class="form-horizontal" id="ModalForm" enctype = "multipart/form-data">
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.IsUpdate)
                 @Html.HiddenFor(m => m.Id)
@@ -48,7 +48,7 @@
                                 }
                                 else
                                 {
-                                    <img src="~/Content/Images/missing.jpg" width="160" height="160" />
+                                    <img src="~/Images/missing.jpg" width="160" height="160" />
                                 }
                             </div>
                         </div>
@@ -70,17 +70,16 @@
         $('#close-button').click(function () {
             location.href = "/";
         });
-        $('.btn-primary').click(function () {
+        $('#confirmok1').click(function (e) {
             var std = $(this).attr('id');
             var title = $(this).attr('title');
             $('#myModal').modal({
                 backdrop: 'static',
                 keyboard: false
             })
-            .on('click', '#confirmok1', function (e) {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("AddEditRecord")',
+                    url: '@Url.Action("Product/AddEditRecord")',
                     data: '{Id: ' + JSON.stringify(std) + '}',
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
@@ -91,9 +90,8 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         alert('oops, something bad happened')
                     }
-                });
-            })
-                ;
+             
+            });
         });
     });
     $(document).ready(function () {

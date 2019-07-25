@@ -1,6 +1,7 @@
 ﻿namespace Brandoman.Web
 {
     using System;
+    using System.IO;
     using System.Reflection;
     using System.Text;
 
@@ -29,6 +30,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
 
