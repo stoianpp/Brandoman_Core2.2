@@ -42,6 +42,8 @@
 
         public Task<int> SaveChangesAsync() => this.Context.SaveChangesAsync();
 
+        public void SaveChanges() => this.Context.SaveChanges();
+
         public void Dispose() => this.Context.Dispose();
     }
 }

@@ -46,6 +46,7 @@
                 product.Name = currentProduct.Name;
                 product.Details = currentProduct.Details;
                 product.SubCategoryId = currentProduct.SubCategoryId;
+                product.Image = currentProduct.Image;
 
                 product.IsUpdate = true;
                 product.SubCategories = subCategories.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
@@ -76,17 +77,14 @@
                     }
                     catch
                     {
+                        return this.BadRequest();
                     }
                 }
                 else
                 {
                     try
                     {
-                        var product = this.products.GetProductById((int)productVM.Id);
-                        product.Name = productVM.Name;
-                        product.Details = productVM.Details;
-                        product.SubCategoryId = productVM.SubCategoryId;
-                        this.products.SaveProductAsync(product, imageName);
+                        this.products.Update(productVM, imageName);
 
                         // Code for pictures uploading of SubCategories through product edit window
                         // var cat1 = _subCategories.GetAll().Where(x => x.Id == 4).FirstOrDefault();

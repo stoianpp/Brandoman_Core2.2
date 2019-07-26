@@ -1,116 +1,106 @@
 ﻿@model Brandoman.Data.Models.ViewModels.ProductViewModel
 
-    <div class="modal-dialog" id="ModalPopUp">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">@ViewBag.Message</h4>
-            </div>
-            <form asp-controller="Product" asp-action="AddEditRecord" method="post" class="form-horizontal" id="ModalForm" enctype = "multipart/form-data">
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(m => m.IsUpdate)
-                @Html.HiddenFor(m => m.Id)
-                @Html.HiddenFor(m => m.Image)
+<environment names="Development">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/jqueryui/jquery-ui.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+</environment>
+<environment names="Staging,Production">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+</environment>
 
-                <div class="modal-body container" width="100%">
-                    <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
-                        <div class="form-group row">
-                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control my-control" })
-                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            @Html.LabelFor(model => model.SubCategoryId, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.DropDownListFor(model => model.SubCategoryId, Model.SubCategories, new { @class = "form-control my-control" })
-                                @Html.ValidationMessageFor(model => model.SubCategoryId, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.TextAreaFor(model => model.Details, new { rols = "100", cols = "200", @style = "min-height: 150px", @class = "form-control textarea-editor" })
-                                @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                <input type="file" name="imageName" accept=".jpg, .jpeg, .png">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-9 col-lg-offset-3">
-                                @if (Model.IsUpdate && Model.Image != null)
-                                {
-                                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" width="160" height="160" />
-                                }
-                                else
-                                {
-                                    <img src="~/Images/missing.jpg" width="160" height="160" />
-                                }
-                            </div>
-                        </div>
+<div class="modal-dialog" id="ModalPopUp">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">@ViewBag.Message</h4>
+        </div>
+        <form asp-controller="Product" asp-action="AddEditRecord" method="post" class="form-horizontal" id="ModalForm" enctype="multipart/form-data">
+            <input asp-for="IsUpdate" type="hidden" />
+            <input asp-for="Id" type="hidden" />
 
-                        <div class="modal-footer" style="padding:15px">
-                            <div class="form-group row">
-                                <input type="button" class="btn btn-default col-md-6" id="close-button" data-dismiss="modal" value="Cancel">
-                                <input type="submit" class="btn btn-primary col-md-6" id="confirmok1" value="Save" />
-                            </div>
+            <div class="modal-body container" width="100%">
+                <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
+                    <div class="form-group row">
+                        <label asp-for="Name" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+                            <input asp-for="Name" class="form-control my-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="SubCategoryId" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+                            <select asp-for="SubCategoryId" asp-items="Model.SubCategories" class="form-control my-control"></select>
+                            <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.TextAreaFor(model => model.Details, new { rols = "100", cols = "200", @style = "min-height: 150px", @class = "form-control textarea-editor" })
+                            @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Image" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+                            <input asp-for="Image" type="file" name="imageName" accept=".jpg, .jpeg, .png" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-9 col-lg-offset-3">
+                            @if (Model.IsUpdate && Model.Image != null)
+                            {
+                                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" width="160" height="160" />
+                            }
+                            else
+                            {
+                                <img src="~/Images/missing.jpg" width="160" height="160" />
+                            }
+                        </div>
+                    </div>
+
+                    <div class="modal-footer" style="padding:15px">
+                        <div class="form-group row">
+                            <input type="button" class="btn btn-default col-md-6" id="close-button" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-primary col-md-6" id="confirmok1" value="Save" />
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#close-button').click(function () {
-            location.href = "/";
-        });
-        $('#confirmok1').click(function (e) {
-            var std = $(this).attr('id');
-            var title = $(this).attr('title');
-            $('#myModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            })
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Product/AddEditRecord")',
-                    data: '{Id: ' + JSON.stringify(std) + '}',
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-                        window.location.reload();
-                        $('#myModal').modal('hide');
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert('oops, something bad happened')
-                    }
-             
-            });
-        });
-    });
-    $(document).ready(function () {
-        // Initialize Editor
-        $('.textarea-editor').summernote({
-            disableDragAndDrop: true,
-            height: 300, // set editor height
-            minHeight: null, // set minimum height of editor
-            maxHeight: null, // set maximum height of editor
-            focus: true, // set focus to editable area after initializing summernote
-            toolbar: [
-                // [groupName, [list of button]]
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['height', ['height']]
-            ]
-        });
-    });
-</script>
+
+<environment names="Development">
+    <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/umd/popper.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/umd/popper-utils.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/lib/summernote/summernote-bs4.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/custom.js" asp-append-version="true"></script>
+    <script src="~/js/add_edit.js" asp-append-version="true"></script>
+</environment>
+<environment names="Staging,Production">
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/umd/popper.min.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/umd/popper-utils.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/summernote/summernote-bs4.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/js/custom.js" asp-append-version="true"></script>
+    <script src="~/js/add_edit.js" asp-append-version="true"></script>
+</environment>

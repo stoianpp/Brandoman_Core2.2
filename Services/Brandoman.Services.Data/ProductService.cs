@@ -57,7 +57,43 @@
             }
 
             await this.productRepository.AddAsync(product);
-            await this.productRepository.SaveChangesAsync();
+            this.productRepository.SaveChanges();
+        }
+
+        public void UpdateAsync(ProductViewModel productVM, IFormFile imageName)
+        {
+        }
+
+        public bool Update(ProductViewModel productVM, IFormFile imageName)
+        {
+            bool result;
+            try
+            {
+                var product = this.GetProductById((int)productVM.Id);
+                product.Name = productVM.Name;
+                product.Details = productVM.Details;
+                product.SubCategoryId = productVM.SubCategoryId;
+
+                if (imageName != null && imageName.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        imageName.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        product.Image = fileBytes;
+                    }
+                }
+
+                this.productRepository.Update(product);
+                this.productRepository.SaveChanges();
+                result = true;
+            }
+            catch (System.Exception e)
+            {
+                throw new System.Exception(e.Message);
+            }
+
+            return result;
         }
 
         public async Task<bool> Delete(Product toDelete)
@@ -68,7 +104,7 @@
                 this.productRepository.Delete(toDelete);
                 await this.productRepository.SaveChangesAsync();
             }
-            catch (System.Exception)
+            catch
             {
                 result = false;
             }

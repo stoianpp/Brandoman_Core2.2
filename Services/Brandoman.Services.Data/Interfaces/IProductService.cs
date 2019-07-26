@@ -18,5 +18,9 @@
         IQueryable<Product> GetAll();
 
         Task<bool> Delete(Product toDelete);
+
+        void UpdateAsync(ProductViewModel productVM, IFormFile imageName);
+
+        bool Update(ProductViewModel productVM, IFormFile imageName);
     }
 }
