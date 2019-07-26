@@ -69,7 +69,7 @@
             bool result;
             try
             {
-                var product = this.GetProductById((int)productVM.Id);
+                var product = this.productRepository.All().FirstOrDefault(x => x.Id == productVM.Id);
                 product.Name = productVM.Name;
                 product.Details = productVM.Details;
                 product.SubCategoryId = productVM.SubCategoryId;
@@ -88,9 +88,9 @@
                 this.productRepository.SaveChanges();
                 result = true;
             }
-            catch (System.Exception e)
+            catch
             {
-                throw new System.Exception(e.Message);
+                result = false;
             }
 
             return result;

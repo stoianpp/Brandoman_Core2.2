@@ -37,6 +37,8 @@
         {
             configuration.CreateMap<Product, ProductViewModel>()
                 .ForMember(x => x.SubCategory, opt => opt.MapFrom(x => x.SubCategory.Name));
+            configuration.CreateMap<ProductViewModel, Product>()
+               .ForPath(x => x.SubCategory.Name, opt => opt.MapFrom(x => x.SubCategory));
         }
     }
 }
