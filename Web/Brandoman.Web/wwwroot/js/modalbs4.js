@@ -52,7 +52,7 @@ $("#confirmbtn").click(function (e) {
 })
 
 $(".delete-btn").click(function (e) {
-    var id = $(this).attr("id").slice(0, -1);
+    var id = $(this).attr("id");
     confirmDialog("Delete that record?", (ans) => {
         if (ans) {
             $.ajax({

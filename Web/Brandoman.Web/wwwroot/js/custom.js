@@ -19,7 +19,7 @@
             var orderList = [];
             $(this).find("tr").each(function (index) {
                 var item = {
-                    ProductId: $(this).attr("data-productId"),
+                    Id: $(this).attr("data-productId"),
                     Order: index + 1
                 };
                 orderList.push(item);
@@ -31,26 +31,23 @@
             });
 
             if (reordered) {
-                $('#myModal2').modal({
-                    backdrop: 'static',
-                    keyboard: false
+                    confirmDialog("Do you want to save the new order?", (ans) => {
+                        if (ans) {
+                            e.preventDefault();
+                            $.ajax({
+                                type: "POST",
+                                url: 'Product/SaveProductOrder',
+                                data: JSON.stringify(orderList),
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    window.location.href = data;
+                                }
+                            });
+                        } else {
+                            window.location.href = "/";
+                        }
                 })
-                    .on('click', '#confirmOrderOk', function (e) {
-                        e.preventDefault();
-                        $.ajax({
-                            type: "POST",
-                            url: '@Url.Action("SaveProductOrder", "Product")',
-                            data: JSON.stringify(orderList),
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
-                            success: function (success) {
-                                $('#myModal2').modal('hide');
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert('oops, something bad happened')
-                            }
-                        });
-                    })
             };
         }
     });

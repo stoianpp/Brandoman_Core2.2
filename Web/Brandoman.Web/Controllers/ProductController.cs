@@ -1,5 +1,6 @@
 ﻿namespace Brandoman.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -106,8 +107,8 @@
             return this.View(productVM);
         }
 
-        [IgnoreAntiforgeryToken]
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<JsonResult> DeleteRecord(int id)
         {
             string subCategory = null;
@@ -123,6 +124,23 @@
             }
 
             return this.Json(this.Url.Action("Index", "Home", new { active_subCategory = subCategory, toastr = "Record was successfully deleted." }));
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public ActionResult SaveProductOrder([FromBody]IEnumerable<OrderViewModel> orders)
+        {
+            int subCategoryId = this.products.GetProductById(orders.FirstOrDefault().Id).SubCategoryId;
+            try
+            {
+                this.products.MultipleUpdate(orders);
+            }
+            catch
+            {
+                return this.Json(this.Url.Action("Index", "Home", new { active_subCategory = subCategoryId, toastr = "New order hasn't been recorded. Try again." }));
+            }
+
+            return this.Json(this.Url.Action("Index", "Home", new { active_subCategory = subCategoryId, toastr = "New order have been successfully recorder." }));
         }
     }
 }

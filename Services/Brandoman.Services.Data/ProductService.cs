@@ -1,5 +1,6 @@
 ﻿namespace Brandoman.Services.Data
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -30,7 +31,7 @@
 
         public IQueryable<AdminIndexViewModel> GetAllAdminActiveProducts(int active_subCategory)
         {
-            var products = this.productRepository.All().Where(x => x.SubCategoryId == active_subCategory);
+            var products = this.productRepository.All().Where(x => x.SubCategoryId == active_subCategory).OrderBy(x => x.Order);
             var viewModels = products.To<AdminIndexViewModel>();
 
             return viewModels;
@@ -110,6 +111,18 @@
             }
 
             return result;
+        }
+
+        public void MultipleUpdate(IEnumerable<OrderViewModel> orders)
+        {
+            var productIds = orders.Select(x => x.Id);
+            var productList = this.productRepository.All().Where(x => productIds.Contains(x.Id)).ToList();
+            foreach (var product in productList)
+            {
+                product.Order = orders.First(x => x.Id == product.Id).Order;
+                this.productRepository.Update(product);
+                this.productRepository.SaveChanges();
+            }
         }
     }
 }

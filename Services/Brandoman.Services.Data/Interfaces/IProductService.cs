@@ -1,5 +1,6 @@
 ﻿namespace Brandoman.Services.Data.Interfaces
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -22,5 +23,7 @@
         void UpdateAsync(ProductViewModel productVM, IFormFile imageName);
 
         bool Update(ProductViewModel productVM, IFormFile imageName);
+
+        void MultipleUpdate(IEnumerable<OrderViewModel> orders);
     }
 }
