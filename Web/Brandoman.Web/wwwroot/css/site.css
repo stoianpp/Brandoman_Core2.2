@@ -97,7 +97,7 @@ a:hover {
     margin-right: 10px
 }
 
-input.edit {
+button.edit {
     font-weight: bold;
     color: #333;
     width: 25px;
@@ -146,4 +146,9 @@ img.icon {
 nav.navbar .dropdown-menu a:hover {
     padding-left: 25px !important;
     font-weight: bolder
+}
+
+.my-btn{
+    min-width: 80px;
+    margin-left: 10px
 }

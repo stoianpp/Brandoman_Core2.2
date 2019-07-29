@@ -15,6 +15,10 @@
       "destination": "wwwroot/lib/jqueryui/"
     },
     {
+      "library": "toastr@2.1.4",
+      "destination": "wwwroot/lib/toastr/"
+    },
+    {
       "library": "bootstrap@4.3.1",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [

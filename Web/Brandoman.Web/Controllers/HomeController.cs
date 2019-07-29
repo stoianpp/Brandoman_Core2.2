@@ -17,7 +17,7 @@
             this.categoryService = categoryServiceIn;
         }
 
-        public IActionResult Index(int? active_category, int? active_subCategory)
+        public IActionResult Index(int? active_category, int? active_subCategory, string toastr)
         {
             if (active_subCategory != null && active_category == null)
             {
@@ -38,6 +38,7 @@
                 this.ViewBag.SubCategories = this.categoryService.GetAllSubCategories((int)active_category);
                 this.ViewBag.CurrentSubCategoryId = active_subCategory;
                 this.ViewBag.CurrentCategoryId = active_category;
+                this.ViewBag.Toastr = toastr;
 
                 var products = this.productService.GetAllAdminActiveProducts(active_subCategory != null ? (int)active_subCategory : -1);
                 return this.View("Admin", products);

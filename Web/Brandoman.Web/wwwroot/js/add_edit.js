@@ -1,28 +1,4 @@
 ﻿$(document).ready(function () {
-    $('form').each(function () {
-        if ($(this).data('validator'))
-            $(this).data('validator').settings.ignore = ".note-editor *";
-    });
-
-    $('#close-button').click(function () {
-        location.href = "/";
-    });
-    $('#confirmok1').click(function (e) {
-        var std = $(this).attr('id');
-        $('#myModal').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Product/AddEditRecord")',
-            data: '{Id: ' + JSON.stringify(std) + '}',
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-        });
-    });
-});
-$(document).ready(function () {
     // Initialize Editor
     $('.textarea-editor').summernote({
         disableDragAndDrop: true,

@@ -32,9 +32,9 @@
             this.products = productsIn;
         }
 
-        [HttpGet]
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public IActionResult AddEditRecord(int? id, int cat)
+        [Route("Product/AddEditRecord")]
+        [HttpGet("{cat,id}")]
+        public IActionResult AddEditRecord(int cat, int? id)
         {
             var subCategories = this.categories.GetAllSubCategories(cat);
             var product = new ProductViewModel();
@@ -51,19 +51,20 @@
                 product.IsUpdate = true;
                 product.SubCategories = subCategories.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
                 product.SubCategories.FirstOrDefault(x => int.Parse(x.Value) == product.SubCategoryId).Selected = true;
-                return this.PartialView(product);
+                return this.View(product);
             }
 
             product.SubCategories = subCategories.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
             product.IsUpdate = false;
             this.ViewBag.Message = "New Product";
 
-            return this.PartialView(product);
+            return this.View(product);
         }
 
+        [ActionName("AddEditRecords")]
         [HttpPost]
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public ActionResult AddEditRecord(ProductViewModel productVM, IFormFile imageName)
+        public IActionResult AddEditRecords(ProductViewModel productVM, IFormFile imageName)
         {
             if (this.ModelState.IsValid)
             {
@@ -73,11 +74,11 @@
                     try
                     {
                         this.products.SaveProductAsync(product, imageName);
-                        return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId });
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId, toastr = "New record has been created successfully." });
                     }
                     catch
                     {
-                        return this.BadRequest();
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId, toastr = "ERROR: No record has been created. Try again." });
                     }
                 }
                 else
@@ -85,6 +86,7 @@
                     try
                     {
                         this.products.Update(productVM, imageName);
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId, toastr = "The record has been updated successfully" });
 
                         // Code for pictures uploading of SubCategories through product edit window
                         // var cat1 = _subCategories.GetAll().Where(x => x.Id == 4).FirstOrDefault();
@@ -93,9 +95,8 @@
                     }
                     catch
                     {
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId, toastr = "ERROR: Record hasn't been updated. Try again." });
                     }
-
-                    return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId });
                 }
             }
 
@@ -105,23 +106,23 @@
             return this.View(productVM);
         }
 
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<ActionResult> DeleteRecord(int id)
+        public async Task<JsonResult> DeleteRecord(int id)
         {
-            bool result;
+            string subCategory = null;
             try
             {
                 var product = this.products.GetProductById(id);
-                result = await this.products.Delete(product);
+                subCategory = product.SubCategoryId.ToString();
+                await this.products.Delete(product);
             }
             catch
             {
-                result = false;
+                return this.Json(this.Url.Action("Index", "Home", new { active_subCategory = subCategory, toastr = "Record hasn't been deleted. Try again." }));
             }
 
-            return this.Json(new { success = result });
+            return this.Json(this.Url.Action("Index", "Home", new { active_subCategory = subCategory, toastr = "Record was successfully deleted." }));
         }
     }
 }

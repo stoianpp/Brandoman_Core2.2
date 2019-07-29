@@ -10,7 +10,7 @@
 @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
     <div class="container">
-        <form asp-controller="" asp-action="" method="post" style="padding-top:30px; min-height:600px">
+        <form asp-controller="" asp-action="" style="padding-top:30px; min-height:600px">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -20,7 +20,7 @@
                                     <h2 class="card-title">@ViewBag.Title</h2>
                                 </div>
                                 <div class="col col-xs-6 text-right">
-                                    <input type="button" class="btn-bootstrap-dialog btn btn-success pull-right button-width" data-url="@Url.Action("AddEditRecord", "Product", new { title = "Add Product", cat = ViewBag.CurrentCategoryId, subCat = ViewBag.CurrentSubCategoryId })" value="Create New" data-toggle="modal" />
+                                    <button asp-controller="Product" asp-action="AddEditRecord" asp-route-cat=@ViewBag.CurrentCategoryId class="btn-bootstrap-dialog btn btn-success" style="margin-top: 5px">New Product</button>
                                 </div>
                             </div>
                         </div>
@@ -51,8 +51,8 @@
                                             <td style="text-align: center">@Data.SubCategory</td>
                                             <td style="text-align: center">@details</td>
                                             <td class="text-center" style="text-align: center">
-                                                <input type="button" class="btn-bootstrap-dialog btn edit" data-url="@Url.Action("AddEditRecord", "Product", new { id = Data.Id, cat = ViewBag.CurrentCategoryId, subCat = ViewBag.CurrentSubCategoryId })" />
-                                                <input type="button" class="btn-bootstrap-dialog1 btn delete" data-id="@Data.Id" data-url="@Url.Action("DeleteRecord", "Product", new { id = Data.Id, cat = ViewBag.CurrentCategoryId, subCat = ViewBag.CurrentSubCategoryId })" />
+                                                <button asp-controller="Product" asp-action="AddEditRecord" asp-route-cat=@ViewBag.CurrentSubCategoryId asp-route-id=@Data.Id class="btn-bootstrap-dialog btn edit"></button>
+                                                <input type=button class="btn-bootstrap-dialog1 btn delete delete-btn" id=@Data.Id/>
                                             </td>
                                         </tr>
                                     }
@@ -105,4 +105,16 @@
             </div>
         </form>
     </div>
+}
+
+@section Scripts
+{
+    <script>
+       $(function(){
+           var text = "@ViewBag.Toastr";
+           if (text != null && text.length > 0) {
+                toastr.info("@ViewBag.Toastr");
+           }
+       })
+    </script>
 }
