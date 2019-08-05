@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
     using Brandoman.Data.Models.ViewModels;
     using Microsoft.AspNetCore.Http;
@@ -11,6 +12,8 @@
     public interface IProductService
     {
         IQueryable<AdminIndexViewModel> GetAllAdminActiveProducts(int active_subCategory);
+
+        IQueryable<LocalAdminIndexViewModel> GetAllLocalAdminActiveProducts(int active_subCategory, Lang userLanguage);
 
         Product GetProductById(int id);
 
@@ -25,5 +28,7 @@
         bool Update(ProductViewModel productVM, IFormFile imageName);
 
         void MultipleUpdate(IEnumerable<OrderViewModel> orders);
+
+        Lang GetCurrentUserLanguage(string userId);
     }
 }

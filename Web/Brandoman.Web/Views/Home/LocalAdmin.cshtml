@@ -1,0 +1,78 @@
+﻿@using Brandoman.Data.Models.ViewModels
+@using Brandoman.Common
+
+@model IQueryable<LocalAdminIndexViewModel>
+
+@if (User.IsInRole(GlobalConstants.LocalAdministratorRoleName))
+{
+    <div class="container">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { style = "padding-top:5px; min-height:600px" }))
+        {
+            <div class="row">
+
+                    <div class="panel panel-default panel-table" style="width: 100%">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col col-xs-6">
+                                    <h2 class="panel-title btn">@ViewBag.Title</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="padding-bottom:1px">
+                            <table id="TblStudent" class="table table-striped table-bordered table-list">
+                                <thead>
+                                    <tr class="titleTr">
+                                        <th class="text-center">
+                                            Name
+                                        </th>
+                                        <th class="text-center">
+                                            Details
+                                        </th>
+                                        <th class="text-center">
+                                            Translations
+                                        </th>
+                                        <th class="text-center">
+                                            Active
+                                        </th>
+                                        <th class="text-center">
+                                            Edit
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var Data in Model)
+                                    {
+                                        string details = @Data.Details.Length > 0 ? "Text with " + @Data.Details.Length + " symbols" : "Text not available";
+                                        string translation = "...not available...";
+                                        if (Data.LangText != null && Data.LangText.Length > 0) translation =  "Available text with " + @Data.LangText.Length + " symbols";
+
+                                        <tr>
+                                            <td style="text-align: center">@Data.Name</td>
+                                            <td style="text-align: center">@details</td>
+                                            <td style="text-align: center">@translation</td>
+                                            <td style="text-align: center">
+                                                @if (Data.Active)
+                                                {
+                                                    <img class="icon" src="Images/available.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="icon" src="Images/notavailable.png" />
+                                                }
+                                            </td>
+                                            <td class="text-center" style="text-align: center">
+                                                <button type="button" class="btn-bootstrap-dialog btn edit" data-url="@Url.Action("AddEditTranslation", "Product", new { id = Data.Id, cat = ViewBag.CurrentCategoryId, subCat = ViewBag.CurrentSubCategoryId })" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                
+            </div>
+        }
+    </div>
+}
+

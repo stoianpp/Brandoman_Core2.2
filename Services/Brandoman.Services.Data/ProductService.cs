@@ -3,24 +3,36 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Security.Claims;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Common.Repositories;
     using Brandoman.Data.Models;
     using Brandoman.Data.Models.ViewModels;
     using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Mapping;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
 
     public class ProductService : IProductService
     {
         private readonly IDeletableEntityRepository<Product> productRepository;
+        private readonly IDeletableEntityRepository<ProductLang> translationRepository;
+        private readonly IUserStore<ApplicationUser> userStore;
         private readonly IMapper mapper;
 
-        public ProductService(IDeletableEntityRepository<Product> products, IMapper mapperIn)
+        public ProductService(
+            IDeletableEntityRepository<Product> products,
+            IDeletableEntityRepository<ProductLang> translations,
+            IUserStore<ApplicationUser> userStore,
+            IMapper mapperIn)
         {
             this.productRepository = products;
+            this.translationRepository = translations;
+            this.userStore = userStore;
             this.mapper = mapperIn;
         }
 
@@ -35,6 +47,23 @@
             var viewModels = products.To<AdminIndexViewModel>();
 
             return viewModels;
+        }
+
+        public IQueryable<LocalAdminIndexViewModel> GetAllLocalAdminActiveProducts(int active_subCategory, Lang language)
+        {
+            var allProductLangs = this.translationRepository.All().Where(x => x.Lang == language);
+            var translationIds = allProductLangs.Select(x => x.ProductId).ToList();
+            var products = this.productRepository.All().Where(x => x.SubCategoryId == active_subCategory);
+            var adminProductViewModels = products.To<LocalAdminIndexViewModel>().ToList();
+            foreach (var product in adminProductViewModels.Where(x => translationIds.Contains((int)x.Id)))
+            {
+                var translation = allProductLangs.Where(x => x.ProductId == product.Id).FirstOrDefault();
+                product.LangText = translation.Text;
+                product.Active = translation.Active;
+                product.Title = translation.Title ?? product.Name;
+            }
+
+            return adminProductViewModels.AsQueryable();
         }
 
         public Product GetProductById(int id)
@@ -123,6 +152,13 @@
                 this.productRepository.Update(product);
                 this.productRepository.SaveChanges();
             }
+        }
+
+        public Lang GetCurrentUserLanguage(string userId)
+        {
+            var cToken = CancellationToken.None;
+            var language = this.userStore.FindByIdAsync(userId, cToken).Result.Lang;
+            return language;
         }
     }
 }
