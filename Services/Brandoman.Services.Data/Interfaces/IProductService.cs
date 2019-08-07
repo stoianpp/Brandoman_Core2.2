@@ -19,6 +19,8 @@
 
         Task SaveProductAsync(Product product, IFormFile imageName);
 
+        Task SaveTranslationAsync(TranslationViewModel translationIn);
+
         IQueryable<Product> GetAll();
 
         Task<bool> Delete(Product toDelete);
@@ -27,8 +29,14 @@
 
         bool Update(ProductViewModel productVM, IFormFile imageName);
 
+        bool UpdateTranslation(TranslationViewModel translationIn);
+
         void MultipleUpdate(IEnumerable<OrderViewModel> orders);
 
         Lang GetCurrentUserLanguage(string userId);
+
+        TranslationViewModel GetTranslationById(int id);
+
+        TranslationViewModel GetNewTranslation(int cat, int productId, int? id, Lang lang, Product product, string subCategory);
     }
 }

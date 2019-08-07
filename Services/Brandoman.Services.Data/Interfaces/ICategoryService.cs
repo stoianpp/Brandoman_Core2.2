@@ -15,5 +15,7 @@
         int GetInitialCategory();
 
         int? GetInitialSubCategory(int active_category);
+
+        string GetSubCategoryName(int cat);
     }
 }

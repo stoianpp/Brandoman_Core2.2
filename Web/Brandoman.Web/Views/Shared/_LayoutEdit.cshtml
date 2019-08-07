@@ -1,0 +1,138 @@
+﻿@using Brandoman.Data.Models.ViewModels
+@using Brandoman.Services.Data.Interfaces
+
+@inject ICategoryService  catService
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@this.ViewData["Title"] - Brandoman</title>
+
+    <environment names="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/jqueryui/jquery-ui.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/toastr/build/toastr.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/toastr/build/toastr.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Brandoman</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        @*@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-light dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="" asp-action="">
+                                    Database
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateBase">Update Base</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update English</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update Bulgarian</a>
+                                </div>
+                            </li>
+                            }*@
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            List<CategoryDropDownViewModel> categories = catService.GetAllCategories().ToList();
+                            @if (categories.Count > 0)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-light dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="" asp-action="">
+                                        Category
+                                        <span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        @foreach (CategoryDropDownViewModel item in categories)
+                                        {
+                                            <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-active_category="@item.Id">@item.Name</a>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            <div class="row">
+                @this.RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - Brandoman - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+        <script src="~/lib/jqueryui/jquery-ui.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+        <script src="~/lib/popper.js/umd/popper.js" asp-append-version="true"></script>
+        <script src="~/lib/popper.js/umd/popper-utils.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+        <script src="~/lib/summernote/summernote-bs4.js" asp-append-version="true"></script>
+        <script src="~/lib/toastr/build/toastr.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/custom.js" asp-append-version="true"></script>
+        <script src="~/js/modalbs4.js" asp-append-version="true"></script>
+        <script src="~/js/add_edit.js" asp-append-version="true"></script>
+
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+        <script src="~/lib/popper.js/umd/popper.min.js" asp-append-version="true"></script>
+        <script src="~/lib/popper.js/umd/popper-utils.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+        <script src="~/lib/summernote/summernote-bs4.min.js" asp-append-version="true"></script>
+        <script src="~/lib/toastr/build/toastr.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/custom.js" asp-append-version="true"></script>
+        <script src="~/js/modalbs4.js" asp-append-version="true"></script>
+        <script src="~/js/add_edit.js" asp-append-version="true"></script>
+
+    </environment>
+
+    @this.RenderSection("Scripts", required: false)
+</body>
+</html>

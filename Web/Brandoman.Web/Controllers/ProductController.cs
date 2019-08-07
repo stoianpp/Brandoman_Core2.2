@@ -1,12 +1,12 @@
 ﻿namespace Brandoman.Web.Controllers
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using Brandoman.Common;
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
     using Brandoman.Data.Models.ViewModels;
     using Brandoman.Services.Data.Interfaces;
@@ -141,6 +141,62 @@
             }
 
             return this.Json(this.Url.Action("Index", "Home", new { active_subCategory = subCategoryId, toastr = "New order have been successfully recorder." }));
+        }
+
+        [Route("Product/AddEditTranslation")]
+        [HttpGet("{cat,productId}")]
+        public IActionResult AddEditTranslation(int cat, int productId, int? id, Lang lang)
+        {
+            var product = this.products.GetProductById(productId);
+            var subCategory = this.categories.GetSubCategoryName(cat);
+
+            var translation = this.products.GetNewTranslation(cat, productId, id, lang, product, subCategory);
+
+            if (id != null)
+            {
+                this.ViewBag.Message = "Edit Translation";
+                return this.View(translation);
+            }
+
+            this.ViewBag.Message = "New Translation";
+            return this.View(translation);
+        }
+
+        [ActionName("AddEditTranslations")]
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.LocalAdministratorRoleName)]
+        public IActionResult AddEditTranslations(TranslationViewModel translationIn)
+        {
+            if (this.ModelState.IsValid)
+            {
+                if (translationIn.Id == null)
+                {
+                    try
+                    {
+                        this.products.SaveTranslationAsync(translationIn);
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = translationIn.SubCategoryId, toastr = "New translation has been created successfully." });
+                    }
+                    catch
+                    {
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = translationIn.SubCategoryId, toastr = "ERROR: No translation has been created. Try again." });
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        this.products.UpdateTranslation(translationIn);
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = translationIn.SubCategoryId, toastr = "The translation has been updated successfully" });
+                    }
+                    catch
+                    {
+                        return this.RedirectToAction("Index", "Home", new { active_subCategory = translationIn.SubCategoryId, toastr = "ERROR: Translation hasn't been updated. Try again." });
+                    }
+                }
+            }
+
+            this.ViewBag.Message = translationIn.Id != null ? "Edit Translation" : "New Translation";
+            return this.View(translationIn);
         }
     }
 }

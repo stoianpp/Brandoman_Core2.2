@@ -35,7 +35,8 @@
         {
             configuration.CreateMap<Product, LocalAdminIndexViewModel>()
                 .ForMember(x => x.SubCategory, opt => opt.MapFrom(x => x.SubCategory.Name))
-                .ForMember(x => x.ProductId, opt => opt.MapFrom(x => x.Id));
+                .ForMember(x => x.ProductId, opt => opt.MapFrom(x => x.Id))
+                .ForMember(x => x.Id, opt => opt.Ignore());
         }
     }
 }

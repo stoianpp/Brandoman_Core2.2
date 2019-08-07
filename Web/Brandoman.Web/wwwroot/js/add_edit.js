@@ -2,7 +2,7 @@
     // Initialize Editor
     $('.textarea-editor').summernote({
         disableDragAndDrop: true,
-        height: 300, // set editor height
+        height: 500, // set editor height
         minHeight: null, // set minimum height of editor
         maxHeight: null, // set maximum height of editor
         focus: true, // set focus to editable area after initializing summernote
@@ -16,5 +16,6 @@
             ['height', ['height']]
         ]
     });
-    $('.dropdown-toggle').dropdown()
+    $('.dropdown-toggle').dropdown();
+    $('#summernote-disabled').summernote('disable');
 });

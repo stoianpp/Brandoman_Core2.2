@@ -49,5 +49,11 @@
 
             return null;
         }
+
+        public string GetSubCategoryName(int cat)
+        {
+            return this.subCategories.All().FirstOrDefault(x => x.Id == cat).Name;
+        }
+
     }
 }

@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -55,12 +54,18 @@
             var translationIds = allProductLangs.Select(x => x.ProductId).ToList();
             var products = this.productRepository.All().Where(x => x.SubCategoryId == active_subCategory);
             var adminProductViewModels = products.To<LocalAdminIndexViewModel>().ToList();
-            foreach (var product in adminProductViewModels.Where(x => translationIds.Contains((int)x.Id)))
+            foreach (var product in adminProductViewModels.Where(x => translationIds.Contains((int)x.ProductId)))
             {
-                var translation = allProductLangs.Where(x => x.ProductId == product.Id).FirstOrDefault();
+                var translation = allProductLangs.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
                 product.LangText = translation.Text;
+                product.Id = translation.Id;
                 product.Active = translation.Active;
                 product.Title = translation.Title ?? product.Name;
+            }
+
+            foreach (var product in adminProductViewModels)
+            {
+                product.Lang = language;
             }
 
             return adminProductViewModels.AsQueryable();
@@ -90,6 +95,21 @@
             this.productRepository.SaveChanges();
         }
 
+        public async Task SaveTranslationAsync(TranslationViewModel translationIn)
+        {
+            ProductLang productTranslation = new ProductLang
+            {
+                Title = translationIn.TitleTranslation,
+                Text = translationIn.Translation,
+                Active = translationIn.Active,
+                Lang = translationIn.Lang,
+                ProductId = translationIn.ProductId,
+            };
+
+            await this.translationRepository.AddAsync(productTranslation);
+            this.productRepository.SaveChanges();
+        }
+
         public void UpdateAsync(ProductViewModel productVM, IFormFile imageName)
         {
         }
@@ -116,6 +136,27 @@
 
                 this.productRepository.Update(product);
                 this.productRepository.SaveChanges();
+                result = true;
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        public bool UpdateTranslation(TranslationViewModel translationIn)
+        {
+            bool result;
+            try
+            {
+                var translation = this.translationRepository.All().FirstOrDefault(x => x.Id == translationIn.Id);
+                translation.Title = translationIn.TitleTranslation;
+                translation.Text = translationIn.Translation;
+                translation.Active = translationIn.Active;
+                this.translationRepository.Update(translation);
+                this.translationRepository.SaveChanges();
                 result = true;
             }
             catch
@@ -159,6 +200,47 @@
             var cToken = CancellationToken.None;
             var language = this.userStore.FindByIdAsync(userId, cToken).Result.Lang;
             return language;
+        }
+
+        public TranslationViewModel GetTranslationById(int id)
+        {
+            var translation = this.translationRepository.All().FirstOrDefault(x => x.Id == id);
+            var result = new TranslationViewModel
+            {
+                Id = translation.Id,
+                Translation = translation.Text,
+                TitleTranslation = translation.Title,
+                Active = translation.Active,
+            };
+
+            return result;
+        }
+
+        public TranslationViewModel GetNewTranslation(int cat, int productId, int? id, Lang lang, Product product, string subCategory)
+        {
+            var translation = new TranslationViewModel();
+            if (id != null)
+            {
+                translation = this.GetTranslationById((int)id);
+                translation.IsUpdate = true;
+                translation.Text = product.Details;
+                translation.Title = product.Name;
+                translation.Lang = lang;
+                translation.SubCategory = subCategory;
+                translation.SubCategoryId = cat;
+                translation.Product = product;
+                return translation;
+            }
+
+            translation.IsUpdate = false;
+            translation.Product = product;
+            translation.Title = product.Name;
+            translation.TitleTranslation = product.Name;
+            translation.Text = product.Details;
+            translation.Lang = lang;
+            translation.SubCategory = subCategory;
+            translation.SubCategoryId = cat;
+            return translation;
         }
     }
 }
