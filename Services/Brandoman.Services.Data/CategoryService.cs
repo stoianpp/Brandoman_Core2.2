@@ -54,6 +54,5 @@
         {
             return this.subCategories.All().FirstOrDefault(x => x.Id == cat).Name;
         }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Brandoman.Web.Controllers
 {
+    using System.Linq;
     using System.Security.Claims;
 
     using Brandoman.Common;
@@ -39,6 +40,8 @@
                 active_subCategory = this.categoryService.GetInitialSubCategory((int)active_category);
             }
 
+            active_subCategory = active_subCategory == null ? 0 : active_subCategory;
+
             this.ViewBag.SubCategories = this.categoryService.GetAllSubCategories((int)active_category);
             this.ViewBag.CurrentSubCategoryId = active_subCategory;
             this.ViewBag.CurrentCategoryId = active_category;
@@ -50,15 +53,17 @@
                 return this.View("Admin", products);
             }
 
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userLang = this.productService.GetCurrentUserLanguage(userId);
             if (this.User.IsInRole(GlobalConstants.LocalAdministratorRoleName))
             {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var userLang = this.productService.GetCurrentUserLanguage(userId);
                 var products = this.productService.GetAllLocalAdminActiveProducts(active_subCategory != null ? (int)active_subCategory : -1, userLang);
                 return this.View("LocalAdmin", products);
             }
 
-            return this.View();
+            var data = this.productService.GetEndUserIndexData((int)active_subCategory, userLang).ToList();
+            this.ViewBag.Title = data.Count > 0 ? "Product List" : "No Data";
+            return this.View(data);
         }
 
         public IActionResult Privacy()

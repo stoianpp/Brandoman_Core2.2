@@ -71,6 +71,21 @@
             return adminProductViewModels.AsQueryable();
         }
 
+        public IQueryable<EndUserViewModel> GetEndUserIndexData(int cat, Lang lang)
+        {
+            var allProductLangs = this.translationRepository.All().Where(x => x.Lang == lang && x.Active == true);
+            var allProducts = this.productRepository.All().Where(x => x.SubCategoryId == cat);
+            var products = allProducts.Select(x => x.Id).ToList();
+            var result = allProductLangs.Where(x => products.Contains(x.ProductId)).Select(x =>
+                                                new EndUserViewModel
+                                                {
+                                                    Title = x.Title,
+                                                    Text = x.Text,
+                                                    Image = allProducts.FirstOrDefault(y => y.Id == x.ProductId).Image,
+                                                });
+            return result;
+        }
+
         public Product GetProductById(int id)
         {
             return this.productRepository.All().FirstOrDefault(x => x.Id == id);

@@ -1,8 +1,41 @@
-﻿@{
-    this.ViewData["Title"] = "Home Page";
-}
+﻿@using Brandoman.Data.Models.ViewModels
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Brandoman!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model IList<EndUserViewModel>
+
+<div style="margin-top: 30px; color:slategrey; font-weight: bolder">
+    <h3>@ViewBag.Title.ToString().ToUpper()</h3>
+    <br />
 </div>
+@if (Model.Count() == 0)
+{
+    <div style="margin: 30px">
+        <h4>No available products in that section</h4>
+    </div>
+}
+@foreach (var product in Model)
+{
+    <div class="row">
+        <div class="col-md-3" style="min-height: 200px">
+            <hr />
+            @if (product.Image != null)
+            {
+                <img src="data:image;base64,@System.Convert.ToBase64String(product.Image)" width="160" height="160" />
+            }
+            else
+            {
+                <img src="~/Content/Images/missing.jpg" width="160" height="160" />
+            }
+        </div>
+        <div class="col-md-9">
+            <H3>
+                @product.Title
+            </H3>
+        </div>
+        <div class="col-md-9">
+            <p>
+                @Html.Raw(product.Text)
+            </p>
+        </div>
+    </div>
+}
+<hr />

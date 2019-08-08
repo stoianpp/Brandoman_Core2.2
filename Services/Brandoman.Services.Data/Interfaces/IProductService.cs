@@ -38,5 +38,7 @@
         TranslationViewModel GetTranslationById(int id);
 
         TranslationViewModel GetNewTranslation(int cat, int productId, int? id, Lang lang, Product product, string subCategory);
+
+        IQueryable<EndUserViewModel> GetEndUserIndexData(int cat, Lang lang);
     }
 }
