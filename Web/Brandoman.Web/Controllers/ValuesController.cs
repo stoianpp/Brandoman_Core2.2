@@ -1,12 +1,14 @@
 ﻿namespace Brandoman.Web.Controllers
 {
+    using System.Linq;
+    using System.Security.Claims;
+
     using Brandoman.Data;
-    using Brandoman.Data.Common.Models;
     using Brandoman.Services;
+    using Brandoman.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Options;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -15,20 +17,30 @@
     {
         private readonly ApplicationDbContext context;
         private readonly ILoginService loginService;
+        private readonly IProductService productService;
+        private readonly ClaimsPrincipal caller;
 
         public ValuesController(
             ApplicationDbContext context,
-            ILoginService loginService)
+            ILoginService loginService,
+            IProductService productService,
+            ClaimsPrincipal caller)
         {
             this.context = context;
             this.loginService = loginService;
+            this.productService = productService;
+            this.caller = caller;
         }
 
         // GET api/values
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return "123";
+            var claims = this.caller.Claims.Select(c => new { c.Type, c.Value });
+            var userId = claims.FirstOrDefault(x => x.Type == "iss").Value;
+            var userLang = this.productService.GetCurrentUserLanguage(userId);
+
+            return " ";
         }
 
         // GET api/values/login
@@ -43,31 +55,6 @@
             }
 
             return this.Ok(new { token = result });
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

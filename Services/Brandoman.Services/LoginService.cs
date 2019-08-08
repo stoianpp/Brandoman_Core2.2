@@ -50,8 +50,9 @@
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, "admin"),
+                    new Claim(ClaimTypes.Name, user.UserName),
                 }),
+                Issuer = user.Id,
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(
                                 new SymmetricSecurityKey(key),

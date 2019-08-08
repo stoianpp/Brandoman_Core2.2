@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Reflection;
+    using System.Security.Claims;
     using System.Text;
 
     using AutoMapper;
@@ -30,7 +31,6 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
 
@@ -145,6 +145,8 @@
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ClaimsPrincipal>(
+                s => s.GetService<IHttpContextAccessor>().HttpContext.User);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
