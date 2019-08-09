@@ -40,5 +40,7 @@
         TranslationViewModel GetNewTranslation(int cat, int productId, int? id, Lang lang, Product product, string subCategory);
 
         IQueryable<EndUserViewModel> GetEndUserIndexData(int cat, Lang lang);
+
+        IEnumerable<AppUserViewModel> GetAppData(Lang lang);
     }
 }

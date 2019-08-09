@@ -29,6 +29,16 @@
             return this.subCategories.All().Where(x => x.CategoryId == category).To<SubCategoryDropDownViewModel>();
         }
 
+        public IQueryable<SubCategory> GetAllSubCategories()
+        {
+            return this.subCategories.All();
+        }
+
+        public IQueryable<Category> GetAllFullCategories()
+        {
+            return this.categories.All();
+        }
+
         public int GetCategoryFromSubCategory(int subCategory)
         {
             return this.subCategories.All().FirstOrDefault(x => x.Id == subCategory).CategoryId;

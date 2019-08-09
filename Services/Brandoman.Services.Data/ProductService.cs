@@ -1,5 +1,6 @@
 ﻿namespace Brandoman.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -15,6 +16,7 @@
     using Brandoman.Services.Mapping;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
     public class ProductService : IProductService
     {
@@ -212,8 +214,8 @@
 
         public Lang GetCurrentUserLanguage(string userId)
         {
-            var cToken = CancellationToken.None;
-            var language = this.userStore.FindByIdAsync(userId, cToken).Result.Lang;
+            var c_Token = CancellationToken.None;
+            var language = this.userStore.FindByIdAsync(userId, c_Token).Result.Lang;
             return language;
         }
 
@@ -256,6 +258,39 @@
             translation.SubCategory = subCategory;
             translation.SubCategoryId = cat;
             return translation;
+        }
+
+        public IEnumerable<AppUserViewModel> GetAppData(Lang lang)
+        {
+            var translations = this.translationRepository.All().Where(x => x.Lang == lang && x.Active == true).ToList();
+
+            var lastEdited = (DateTime)translations.Max(x => x.ModifiedOn);
+            var lastCreated = translations.Max(x => x.CreatedOn);
+            var lastUpdated = DateTime.Compare(lastEdited, lastCreated) < 0 ? lastCreated : lastEdited;
+
+            var products = this.productRepository.All().Include(x => x.SubCategory).ToList();
+
+            var prod = from p in products
+                       from l in translations
+                       where p.ProductLanguages.Contains(l)
+                       select p;
+
+            IEnumerable<AppUserViewModel> trans = prod.Select(x => new AppUserViewModel
+            {
+                Name = translations.Where(y => y.Lang == lang && y.ProductId == x.Id)
+                                    .FirstOrDefault()
+                                    .Title ?? x.Name,
+                Image = x.Image,
+                Id = x.Id,
+                SubCategoryId = x.SubCategoryId,
+                SubCategory = x.SubCategory.Name,
+                Timestamp = ((DateTimeOffset)lastUpdated).ToUnixTimeSeconds(),
+                LangText = translations.Where(y => y.Lang == lang && y.ProductId == x.Id)
+                                    .FirstOrDefault()
+                                    .Text,
+            });
+
+            return trans;
         }
     }
 }

@@ -18,29 +18,69 @@
         private readonly ApplicationDbContext context;
         private readonly ILoginService loginService;
         private readonly IProductService productService;
+        private readonly ICategoryService categoryService;
         private readonly ClaimsPrincipal caller;
 
         public ValuesController(
             ApplicationDbContext context,
             ILoginService loginService,
             IProductService productService,
+            ICategoryService categoryService,
             ClaimsPrincipal caller)
         {
             this.context = context;
             this.loginService = loginService;
             this.productService = productService;
+            this.categoryService = categoryService;
             this.caller = caller;
         }
 
         // GET api/values
         [HttpGet]
-        public ActionResult<string> Get()
+        public IActionResult Get()
         {
             var claims = this.caller.Claims.Select(c => new { c.Type, c.Value });
             var userId = claims.FirstOrDefault(x => x.Type == "iss").Value;
             var userLang = this.productService.GetCurrentUserLanguage(userId);
 
-            return " ";
+            var data = this.productService.GetAppData(userLang);
+
+            Microsoft.Extensions.Primitives.StringValues stamp;
+            var timestamp = stamp.FirstOrDefault();
+            try
+            {
+                var result = this.Request.Headers.TryGetValue("Timestamp", out stamp);
+            }
+            catch
+            {
+                return this.BadRequest();
+            }
+
+            var lastUpdated = data.First().Timestamp;
+            var longTimestamp = long.Parse(timestamp);
+            if (lastUpdated <= longTimestamp)
+            {
+                return this.NotFound();
+            }
+
+            var subCatIds = data.Select(x => x.SubCategoryId).Distinct();
+            var subCatsFull = this.categoryService.GetAllSubCategories().Where(x => subCatIds.Contains(x.Id)).ToList();
+
+            // Add local names for subcategories
+            // foreach (var item in subCatsFull)
+            // {
+            //     var newName = LocalResource.Resource.ResourceManager.GetString(item.Name.Replace(" ", "_"));
+            //     item.Name = newName ?? item.Name;
+            // }
+            var subCats = subCatsFull.Select(x => new { x.Name, x.Image, x.CategoryId, x.Id }).ToList();
+            var catsAll = this.categoryService.GetAllFullCategories();
+
+            var cats = (from s in subCatsFull
+                        from c in catsAll
+                        where c.SubCategories.Contains(s)
+                        select new { c.Name, c.Image, c.Id }).Distinct();
+
+            return new JsonResult(new { data, cats, subCats, lastUpdated, longTimestamp });
         }
 
         // GET api/values/login
