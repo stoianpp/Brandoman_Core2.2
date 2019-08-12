@@ -102,6 +102,14 @@
                 });
 
             services
+                .AddCors(options =>
+                {
+                    options.AddPolicy(
+                        "AllowOrigin",
+                        builder => builder.AllowAnyOrigin());
+                });
+
+            services
                 .AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

@@ -8,8 +8,10 @@
     using Brandoman.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -45,11 +47,10 @@
 
             var data = this.productService.GetAppData(userLang);
 
-            Microsoft.Extensions.Primitives.StringValues stamp;
-            var timestamp = stamp.FirstOrDefault();
+            Microsoft.Extensions.Primitives.StringValues timestamp;
             try
             {
-                var result = this.Request.Headers.TryGetValue("Timestamp", out stamp);
+                var result = this.Request.Headers.TryGetValue("timestamp", out timestamp);
             }
             catch
             {
