@@ -4,72 +4,72 @@
     Layout = "~/Views/Shared/_LayoutEdit.cshtml";
 }
 
-    <form asp-controller="Product" asp-action="AddEditTranslations" method="post" class="form-horizontal">
-        <dir class="row">
-            <div class="col-md-6">
-                <h2>@ViewBag.Message</h2>
-                <h4>Category: @Model.SubCategory</h4>
-                <div class="row form-group" style="margin-top: 50px">
-                    <label asp-for="Active" class="control-label col-md-3"></label>
-                    <div class="col-md-9 custom-checkbox custom-control">
-                        <input type="checkbox" asp-for="Active" class="mycheckbox" autocomplete="off" />
-                    </div>
+<form asp-controller="Product" asp-action="AddEditTranslations" method="post" class="form-horizontal">
+    <dir class="row">
+        <div class="col-md-6">
+            <h2>@ViewBag.Message</h2>
+            <h4>Category: @Model.SubCategory</h4>
+            <div class="row form-group" style="margin-top: 50px">
+                <label asp-for="Active" class="control-label col-md-3"></label>
+                <div class="col-md-9 custom-checkbox custom-control">
+                    <input type="checkbox" asp-for="Active" class="mycheckbox" autocomplete="off" />
                 </div>
-            </div>
-            <div class="col-md-6">
-                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Product.Image)" width="200" height="200" />
-            </div>
-        </dir>
-        <hr />
-        <dir class="row">
-            <div class="col-md-6" style="background-color: lightgray">
-                <input asp-for="IsUpdate" type="hidden" />
-                <input asp-for="Id" type="hidden" />
-                <input asp-for="SubCategoryId" type="hidden" />
-                <input asp-for="ProductId" type="hidden" />
-                <input asp-for="Lang" type="hidden" />
-
-                <div class="modal-body container" width="100%">
-                    <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
-                        <div class="form-group row">
-                            <label asp-for="Title" class="control-label col-md-3"></label>
-                            <div class="col-md-9">
-                                <input asp-for="Title" class="form-control my-control" disabled />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.TextAreaFor(model => model.Text, new { rols = "100", cols = "400", id = "summernote-disabled", @style = "min-height: 150px; min-height:400px", @class = "form-control  textarea-editor" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6" style="background-color: whitesmoke">
-                <div class="modal-body container" width="100%">
-                    <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
-                        <div class="form-group row">
-                            <label asp-for="TitleTranslation" class="control-label col-md-3"></label>
-                            <div class="col-md-9">
-                                <input asp-for="TitleTranslation" class="form-control my-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Translation, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.TextAreaFor(model => model.Translation, new { rols = "100", cols = "400", @style = "min-height: 150px", @class = "form-control  textarea-editor" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </dir>
-        <div class="modal-footer" style="padding:15px">
-            <div class="form-group row offset-md-9">
-                <button type="submit" class="btn btn-primary my-btn" id="confirmbtn">Save</button>
             </div>
         </div>
-    </form>
+        <div class="col-md-6">
+            <img src="data:image;base64,@System.Convert.ToBase64String(Model.Product.Image)" width="200" height="200" />
+        </div>
+    </dir>
+    <hr />
+    <dir class="row">
+        <div class="col-md-6" style="background-color: lightgray">
+            <input asp-for="IsUpdate" type="hidden" />
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="SubCategoryId" type="hidden" />
+            <input asp-for="ProductId" type="hidden" />
+            <input asp-for="Lang" type="hidden" />
+
+            <div class="modal-body container" width="100%">
+                <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
+                    <div class="form-group row">
+                        <label asp-for="Title" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+                            <input asp-for="Title" class="form-control my-control" disabled />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.TextAreaFor(model => model.Text, new { rols = "100", cols = "400", id = "summernote-disabled", @style = "min-height: 150px; min-height:400px", @class = "form-control  textarea-editor" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" style="background-color: whitesmoke">
+            <div class="modal-body container" width="100%">
+                <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
+                    <div class="form-group row">
+                        <label asp-for="TitleTranslation" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+                            <input asp-for="TitleTranslation" class="form-control my-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Translation, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.TextAreaFor(model => model.Translation, new { rols = "100", cols = "400", @style = "min-height: 150px", @class = "form-control  textarea-editor" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </dir>
+    <div class="modal-footer" style="padding:15px">
+        <div class="form-group row offset-md-9">
+            <button type="submit" class="btn btn-primary my-btn" id="confirmbtn">Save</button>
+        </div>
+    </div>
+</form>
 

@@ -12,7 +12,7 @@
     [Area("Administration")]
     public class AdministrationController : BaseController
     {
-        public string GetUserId()
+        internal string GetUserId()
         {
             return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }

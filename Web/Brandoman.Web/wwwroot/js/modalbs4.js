@@ -51,6 +51,19 @@ $("#confirmbtn").click(function (e) {
     });
 })
 
+$("#confirmbtncat").click(function (e) {
+    e.preventDefault();
+    var formBase = $("form").has("#confirmbtncat");
+
+    confirmDialog("Save changes?", (ans) => {
+        if (ans) {
+            formBase.submit();
+        } else {
+            window.location.reload();
+        }
+    });
+})
+
 $(".delete-btn").click(function (e) {
     var id = $(this).attr("id");
     confirmDialog("Delete that record?", (ans) => {

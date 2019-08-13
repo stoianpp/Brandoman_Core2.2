@@ -66,13 +66,7 @@
 
             var subCatIds = data.Select(x => x.SubCategoryId).Distinct();
             var subCatsFull = this.categoryService.GetAllSubCategories().Where(x => subCatIds.Contains(x.Id)).ToList();
-
-            // Add local names for subcategories
-            // foreach (var item in subCatsFull)
-            // {
-            //     var newName = LocalResource.Resource.ResourceManager.GetString(item.Name.Replace(" ", "_"));
-            //     item.Name = newName ?? item.Name;
-            // }
+            var localSubCats = this.categoryService.LocalizeSubCats(subCatsFull);
             var subCats = subCatsFull.Select(x => new { x.Name, x.Image, x.CategoryId, x.Id }).ToList();
             var catsAll = this.categoryService.GetAllFullCategories();
 

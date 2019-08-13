@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Brandoman.Data.Common.Models;
     using Brandoman.Data.Common.Repositories;
@@ -89,22 +90,62 @@
                         LangText = trans.LangText,
                         Name = trans.Name,
                         Lang = trans.Lang,
-                        Image = subCategory.Image,
+                        SubCategoryId = subCategory.Id,
                     });
                 }
                 else
                 {
                     result.Add(new SubCategoryIndexViewModel
                     {
+                        Id = 0,
                         LangText = "No translation available",
                         Name = subCategory.Name,
                         Lang = lang,
-                        Image = subCategory.Image,
+                        SubCategoryId = subCategory.Id,
                     });
                 }
             }
 
             return result;
+        }
+
+        public async Task SaveSubCategotyLangAsync(SubCategoryLang subCategoryTranslation)
+        {
+            await this.subCategoryLangs.AddAsync(subCategoryTranslation);
+            this.subCategoryLangs.SaveChanges();
+        }
+
+        public SubCategoryLang GetSubCategoryTranslation(int subCategoryLangId)
+        {
+            return this.subCategoryLangs.All().FirstOrDefault(x => x.Id == subCategoryLangId);
+        }
+
+        public bool UpdateSubCategoryTranslation(SubCategoryLang subCategoryTranslation)
+        {
+            bool result;
+            try
+            {
+                this.subCategoryLangs.Update(subCategoryTranslation);
+                this.subCategoryLangs.SaveChanges();
+                result = true;
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        public List<SubCategory> LocalizeSubCats(List<SubCategory> subCats)
+        {
+            var subCategoryTranslation = this.subCategoryLangs.All();
+            foreach (var translation in subCategoryTranslation)
+            {
+                subCats.FirstOrDefault(x => x.Id == translation.SubCategoryId).Name = translation.LangText;
+            }
+
+            return subCats;
         }
     }
 }
