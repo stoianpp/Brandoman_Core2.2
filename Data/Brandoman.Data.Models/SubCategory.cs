@@ -9,6 +9,7 @@
         public SubCategory()
         {
             this.Products = new HashSet<Product>();
+            this.SubCategoryLangs = new HashSet<SubCategoryLang>();
         }
 
         public string Name { get; set; }
@@ -20,5 +21,7 @@
         public virtual Category Category { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
+
+        public virtual ICollection<SubCategoryLang> SubCategoryLangs { get; set; }
     }
 }

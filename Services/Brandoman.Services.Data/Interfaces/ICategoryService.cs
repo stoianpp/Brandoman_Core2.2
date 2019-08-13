@@ -1,6 +1,9 @@
 ﻿namespace Brandoman.Services.Data.Interfaces
 {
+    using System.Collections.Generic;
     using System.Linq;
+
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
     using Brandoman.Data.Models.ViewModels;
 
@@ -21,5 +24,7 @@
         int? GetInitialSubCategory(int active_category);
 
         string GetSubCategoryName(int cat);
+
+        IList<SubCategoryIndexViewModel> GetSubCategoryLangs(IEnumerable<SubCategory> subCategories, Lang lang);
     }
 }

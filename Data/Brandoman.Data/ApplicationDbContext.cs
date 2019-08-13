@@ -36,6 +36,8 @@
 
         public DbSet<ProductLang> ProductLangs { get; set; }
 
+        public DbSet<SubCategoryLang> SubCategoryLangs { get; set; }
+
         public DbSet<SubCategory> SubCategories { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
