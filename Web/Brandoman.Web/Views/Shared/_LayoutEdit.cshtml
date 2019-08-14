@@ -42,21 +42,6 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        @*@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-                            {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link text-light dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="" asp-action="">
-                                    Database
-                                    <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateBase">Update Base</a>
-                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update English</a>
-                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update Bulgarian</a>
-                                </div>
-                            </li>
-                            }*@
-
                         @if (User.Identity.IsAuthenticated)
                         {
                             List<CategoryDropDownViewModel> categories = catService.GetAllCategories().ToList();

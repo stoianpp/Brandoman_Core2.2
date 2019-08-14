@@ -153,7 +153,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
