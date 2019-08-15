@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Brandoman.Data.Common\Brandoman.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Data\Brandoman.Data.Models\Brandoman.Data.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,9 +6,11 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Text;
+    using System.Threading.Tasks;
 
-    using AutoMapper;
     using Brandoman.Data.Common.Models;
+    using Brandoman.Data.Common.Repositories;
+    using Brandoman.Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
@@ -18,10 +20,12 @@
     public class LoginService : ILoginService
     {
         private readonly IOptions<JwtSettings> options;
+        private readonly IDeletableEntityRepository<LoginLog> loginRepository;
 
-        public LoginService(IOptions<JwtSettings> options)
+        public LoginService(IOptions<JwtSettings> options, IDeletableEntityRepository<LoginLog> loginRepository)
         {
             this.options = options;
+            this.loginRepository = loginRepository;
         }
 
         public string GetToken(IEnumerable<IdentityUser> users, string username, string password)
@@ -63,6 +67,12 @@
             var jwt = tokenHandler.WriteToken(token);
 
             return jwt;
+        }
+
+        public async Task LoginRecord(LoginLog login)
+        {
+            await this.loginRepository.AddAsync(login);
+            this.loginRepository.SaveChanges();
         }
     }
 }

@@ -3,7 +3,9 @@
     using System.Linq;
     using System.Security.Claims;
 
+    using Brandoman.Common;
     using Brandoman.Data;
+    using Brandoman.Data.Models;
     using Brandoman.Services;
     using Brandoman.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,6 +46,10 @@
             var claims = this.caller.Claims.Select(c => new { c.Type, c.Value });
             var userId = claims.FirstOrDefault(x => x.Type == "iss").Value;
             var userLang = this.productService.GetCurrentUserLanguage(userId);
+            var userName = claims.FirstOrDefault(x => x.Type == GlobalConstants.NameClaim).Value;
+
+            var newLogin = new LoginLog { UserId = userId, UserName = userName, UserLang = userLang };
+            this.loginService.LoginRecord(newLogin);
 
             var data = this.productService.GetAppData(userLang);
 
