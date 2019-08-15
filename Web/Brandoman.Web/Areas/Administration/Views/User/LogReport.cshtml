@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Users' Login Report";
+    Layout = "~/Views/Shared/_LayoutEdit.cshtml";
+}
+
+<br />
+
+<style>
+    form_main {
+        width: 100%;
+    }
+
+    .form_main h4 {
+        font-family: roboto;
+        font-size: 20px;
+        font-weight: 300;
+        margin-bottom: 15px;
+        margin-top: 20px;
+        text-transform: uppercase;
+    }
+
+    .heading {
+        border-bottom: 1px solid #808080;
+        padding-bottom: 9px;
+        position: relative;
+    }
+
+        .heading span {
+            background: #000000 none repeat scroll 0 0;
+            bottom: -2px;
+            height: 3px;
+            left: 0;
+            position: absolute;
+            width: 75px;
+        }
+
+    .form {
+        border-radius: 7px;
+        padding: 6px;
+    }
+
+    .txt[type="datetime"] {
+        border: 1px solid #ccc;
+        margin: 10px 0;
+        padding: 10px 0 10px 5px;
+        width: 100%;
+    }
+
+    .txt_3[type="datetime"] {
+        margin: 10px 0 0;
+        padding: 10px 0 10px 5px;
+        width: 100%;
+    }
+
+    .txt2[type="submit"] {
+        background: #242424 none repeat scroll 0 0;
+        border: 1px solid #4f5c04;
+        border-radius: 25px;
+        color: #fff;
+        font-size: 16px;
+        font-style: normal;
+        line-height: 35px;
+        margin: 10px 0;
+        padding: 0;
+        text-transform: uppercase;
+        width: 30%;
+    }
+
+    .txt2:hover {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        color: #5793ef;
+        transition: all 0.5s ease 0s;
+    }
+
+    .ui-datepicker-prev .ui-icon, .ui-datepicker-next .ui-icon {
+        background-color: darkgray
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="form_main">
+                <h4 class="heading">@ViewBag.Title</h4>
+
+                <div class="form">
+
+                    <form asp-area="Administration" asp-controller="User" asp-action="GetLoginReport" method="post" id="contactFrm" name="contactFrm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        Start Date
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" textmode="Date" value="1/1/2019" required placeholder="Enter startind date" name="start" class="txt datepicker startdate">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        End Date
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" textmode="Date" value="1/1/2019" required placeholder="Enter final date" name="end" class="txt datepicker enddate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <input style="margin-top: 60px; background-color: forestgreen" type="submit" value="get report" name="submit" class="txt2">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker({
+                prevText: "Previous",
+                nextText: "Next"
+            });
+            var today = new Date();
+            today.setDate(today.getDate() - 30);
+            $('.startdate').datepicker("setDate", today);
+            $('.enddate').datepicker("setDate", new Date());
+        });
+    </script>
+}

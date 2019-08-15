@@ -74,5 +74,10 @@
             await this.loginRepository.AddAsync(login);
             this.loginRepository.SaveChanges();
         }
+
+        public IQueryable<LoginLog> All()
+        {
+            return this.loginRepository.All();
+        }
     }
 }

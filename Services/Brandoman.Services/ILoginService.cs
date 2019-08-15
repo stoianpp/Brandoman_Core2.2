@@ -1,6 +1,7 @@
 ﻿namespace Brandoman.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Brandoman.Data.Models;
@@ -11,5 +12,7 @@
         string GetToken(IEnumerable<IdentityUser> user, string username, string password);
 
         Task LoginRecord(LoginLog login);
+
+        IQueryable<LoginLog> All();
     }
 }
