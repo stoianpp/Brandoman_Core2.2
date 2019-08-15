@@ -1,11 +1,13 @@
 ﻿namespace Brandoman.Web.Areas.Identity.Pages.Account
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Security.Claims;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
-
+    using Brandoman.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
@@ -22,17 +24,20 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IProductService productService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IProductService productService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.productService = productService;
         }
 
         [BindProperty]
@@ -50,7 +55,9 @@
             returnUrl = returnUrl ?? this.Url.Content("~/");
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userLang = this.productService.GetCurrentUserLanguage(userId);
+                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, Lang = userLang };
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
@@ -68,8 +75,10 @@
                         "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await this.signInManager.SignInAsync(user, isPersistent: false);
-                    return this.LocalRedirect(returnUrl);
+                    // await this.signInManager.SignInAsync(user, isPersistent: false);
+
+                    // hardcoded return url
+                    return this.LocalRedirect("/Administration/User/Index");
                 }
 
                 foreach (var error in result.Errors)

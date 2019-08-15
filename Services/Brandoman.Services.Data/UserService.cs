@@ -1,7 +1,7 @@
 ﻿namespace Brandoman.Services.Data.Interfaces
 {
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Brandoman.Data.Common.Models;
     using Brandoman.Data.Common.Repositories;
@@ -20,8 +20,30 @@
 
         public IQueryable<ApplicationUserIndexViewModel> GetUsersByLanguage(Lang lang)
         {
-            var result = this.userRepository.All().Where(x => x.Lang == lang);
+            var result = this.userRepository.All().Where(x => x.Lang == lang).OrderBy(x => x.UserName);
             return result.To<ApplicationUserIndexViewModel>();
+        }
+
+        public ApplicationUser GetUserById(string user)
+        {
+            var result = this.userRepository.All().FirstOrDefault(x => x.Id == user);
+            return result;
+        }
+
+        public async Task<bool> DeleteUser(ApplicationUser user)
+        {
+            var result = true;
+            try
+            {
+                this.userRepository.Delete(user);
+                await this.userRepository.SaveChangesAsync();
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }

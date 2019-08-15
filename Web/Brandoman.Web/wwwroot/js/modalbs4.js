@@ -83,3 +83,23 @@ $(".delete-btn").click(function (e) {
         }
     });
 })
+
+$(".delete-user-btn").click(function (e) {
+    var id = $(this).attr("id");
+    confirmDialog("Delete that user?", (ans) => {
+        if (ans) {
+            $.ajax({
+                type: "POST",
+                url: 'DeleteUser?id=' + id,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                crossDomain: true,
+                success: function (data) {
+                    window.location.href = data;
+                }
+            });
+        } else {
+            window.location.href = "User/Index";
+        }
+    });
+})

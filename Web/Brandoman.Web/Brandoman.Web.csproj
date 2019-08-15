@@ -51,7 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Administration\Views\User\" />
     <Folder Include="wwwroot\lib\jqueryui\" />
   </ItemGroup>
 </Project>

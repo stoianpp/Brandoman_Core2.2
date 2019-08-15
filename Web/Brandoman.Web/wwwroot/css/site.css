@@ -107,7 +107,7 @@ button.edit {
     background-image: url('../images/edit-pencil.png');
 }
 
-input.delete {
+input.delete, button.delete {
     font-weight: bold;
     color: #333;
     width: 25px;
