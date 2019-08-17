@@ -45,5 +45,10 @@
 
             return result;
         }
+
+        public int GetUsersNumber()
+        {
+            return this.userRepository.All().Count();
+        }
     }
 }

@@ -43,7 +43,6 @@
             using (var serviceScope = serviceProvider.CreateScope())
             {
                 serviceProvider = serviceScope.ServiceProvider;
-
                 return Parser.Default.ParseArguments<SandboxOptions>(args).MapResult(
                     opts => SandboxCode(opts, serviceProvider),
                     _ => 255);
@@ -53,8 +52,8 @@
         private static int SandboxCode(SandboxOptions options, IServiceProvider serviceProvider)
         {
             var sw = Stopwatch.StartNew();
-            var settingsService = serviceProvider.GetService<ISettingsService>();
-            Console.WriteLine($"Count of settings: {settingsService.GetCount()}");
+            var userService = serviceProvider.GetService<IUserService>();
+            Console.WriteLine($"Count of settings: {userService.GetUsersNumber()}");
             Console.WriteLine(sw.Elapsed);
             return 0;
         }
@@ -92,7 +91,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IUserService, UserService>();
         }
     }
 }

@@ -90,7 +90,7 @@ $(".delete-user-btn").click(function (e) {
         if (ans) {
             $.ajax({
                 type: "POST",
-                url: 'DeleteUser?id=' + id,
+                url: '/Administration/User/DeleteUser?id=' + id,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 crossDomain: true,

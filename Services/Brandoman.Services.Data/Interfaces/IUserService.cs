@@ -14,5 +14,7 @@
         ApplicationUser GetUserById(string user);
 
         Task<bool> DeleteUser(ApplicationUser user);
+
+        int GetUsersNumber();
     }
 }

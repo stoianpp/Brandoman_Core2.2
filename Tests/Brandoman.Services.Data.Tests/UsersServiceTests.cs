@@ -15,20 +15,20 @@
 
     using Xunit;
 
-    public class SettingsServiceTests
+    public class UsersServiceTests
     {
         [Fact]
         public void GetCountShouldReturnCorrectNumber()
         {
-            var repository = new Mock<IDeletableEntityRepository<Setting>>();
-            repository.Setup(r => r.All()).Returns(new List<Setting>
+            var repository = new Mock<IDeletableEntityRepository<ApplicationUser>>();
+            repository.Setup(r => r.All()).Returns(new List<ApplicationUser>
                                                         {
-                                                            new Setting(),
-                                                            new Setting(),
-                                                            new Setting(),
+                                                            new ApplicationUser(),
+                                                            new ApplicationUser(),
+                                                            new ApplicationUser(),
                                                         }.AsQueryable());
-            var service = new SettingsService(repository.Object);
-            Assert.Equal(3, service.GetCount());
+            var service = new UserService(repository.Object);
+            Assert.Equal(3, service.GetUsersNumber());
             repository.Verify(x => x.All(), Times.Once);
         }
 
@@ -39,14 +39,14 @@
                 .UseInMemoryDatabase(databaseName: "Find_User_Database") // Give a Unique name to the DB
                 .Options;
             var dbContext = new ApplicationDbContext(options);
-            dbContext.Settings.Add(new Setting());
-            dbContext.Settings.Add(new Setting());
-            dbContext.Settings.Add(new Setting());
+            dbContext.Users.Add(new ApplicationUser());
+            dbContext.Users.Add(new ApplicationUser());
+            dbContext.Users.Add(new ApplicationUser());
             await dbContext.SaveChangesAsync();
 
-            var repository = new EfDeletableEntityRepository<Setting>(dbContext);
-            var service = new SettingsService(repository);
-            var count = service.GetCount();
+            var repository = new EfDeletableEntityRepository<ApplicationUser>(dbContext);
+            var service = new UserService(repository);
+            var count = service.GetUsersNumber();
             Assert.Equal(3, count);
         }
     }
