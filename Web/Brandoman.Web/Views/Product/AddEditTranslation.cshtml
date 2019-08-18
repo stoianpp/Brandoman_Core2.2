@@ -51,6 +51,7 @@
                 <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
                     <div class="form-group row">
                         <label asp-for="TitleTranslation" class="control-label col-md-3"></label>
+                        <span asp-validation-for="TitleTranslation" class="text-danger"></span>
                         <div class="col-md-9">
                             <input asp-for="TitleTranslation" class="form-control my-control" />
                         </div>
@@ -59,6 +60,7 @@
                         @Html.LabelFor(model => model.Translation, htmlAttributes: new { @class = "control-label" })
                         <div>
                             @Html.TextAreaFor(model => model.Translation, new { rols = "100", cols = "400", @style = "min-height: 150px", @class = "form-control  textarea-editor" })
+                            <span asp-validation-for="Translation" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
