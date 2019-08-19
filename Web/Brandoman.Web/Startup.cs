@@ -79,7 +79,7 @@
                 .AddRoles<ApplicationRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(Assembly.Load(typeof(AutoMapperConfig).GetTypeInfo().Assembly.FullName));
 
             services
                 .AddAuthentication() /*options =>
