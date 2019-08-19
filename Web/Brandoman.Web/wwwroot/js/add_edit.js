@@ -8,10 +8,11 @@
         focus: true, // set focus to editable area after initializing summernote
         toolbar: [
             // [groupName, [list of button]]
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['style', ['bold', 'italic', 'underline'/*, 'clear'*/]],
+            ['font', ['strikethrough', 'superscript'/*, 'subscript'*/]],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
+            ['insert', ['picture'/*, 'video'*/]],
             ['para', ['ul', 'ol', 'paragraph']],
             ['height', ['height']]
         ]

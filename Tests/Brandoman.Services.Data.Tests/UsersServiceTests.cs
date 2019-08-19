@@ -2,21 +2,41 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using Brandoman.Data;
     using Brandoman.Data.Common.Repositories;
     using Brandoman.Data.Models;
+    using Brandoman.Data.Models.ViewModels;
     using Brandoman.Data.Repositories;
     using Brandoman.Services.Data.Interfaces;
+    using Brandoman.Services.Mapping;
+    using Brandoman.Web.ViewModels;
     using Microsoft.EntityFrameworkCore;
-
     using Moq;
-
     using Xunit;
 
     public class UsersServiceTests
     {
+        [Fact]
+        public void GetUsersByLanguageShouldReturnCorrectNumber()
+        {
+            var repository = new Mock<IDeletableEntityRepository<ApplicationUser>>();
+            repository.Setup(r => r.All()).Returns(new List<ApplicationUser>
+                                                        {
+                                                            new ApplicationUser { UserName = "Test1", PasswordHash = "Password1!", Lang = Brandoman.Data.Common.Models.Lang.Albanian },
+                                                            new ApplicationUser { UserName = "Test2", PasswordHash = "Password1!", Lang = Brandoman.Data.Common.Models.Lang.Albanian },
+                                                            new ApplicationUser { UserName = "Test3", PasswordHash = "Password1!", Lang = Brandoman.Data.Common.Models.Lang.Bulgarian },
+                                                            new ApplicationUser { UserName = "Test4", PasswordHash = "Password1!", Lang = Brandoman.Data.Common.Models.Lang.Croatian },
+                                                        }.AsQueryable());
+
+            AutoMapperConfig.RegisterMappings(typeof(AdminIndexViewModel).GetTypeInfo().Assembly, typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            var service = new UserService(repository.Object);
+            var result = service.GetUsersByLanguage(Brandoman.Data.Common.Models.Lang.Albanian).Count();
+            Assert.Equal(2, result);
+        }
+
         [Fact]
         public void GetCountShouldReturnCorrectNumber()
         {
