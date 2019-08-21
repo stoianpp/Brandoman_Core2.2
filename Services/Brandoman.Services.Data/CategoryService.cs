@@ -137,9 +137,9 @@
             return result;
         }
 
-        public List<SubCategory> LocalizeSubCats(List<SubCategory> subCats)
+        public List<SubCategory> LocalizeSubCats(List<SubCategory> subCats, Lang lang)
         {
-            var subCategoryTranslation = this.subCategoryLangs.All();
+            var subCategoryTranslation = this.subCategoryLangs.All().Where(x => x.Lang == lang);
             foreach (var translation in subCategoryTranslation)
             {
                 subCats.FirstOrDefault(x => x.Id == translation.SubCategoryId).Name = translation.LangText;

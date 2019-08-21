@@ -33,5 +33,13 @@
             var response = await client.GetAsync("Identity/Account/Manage");
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         }
+
+        [Fact]
+        public async Task RegisterNewLocalUserPageRequiresAuthorization()
+        {
+            var client = this.server.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+            var response = await client.GetAsync("Identity/Account/Register");
+            Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        }
     }
 }

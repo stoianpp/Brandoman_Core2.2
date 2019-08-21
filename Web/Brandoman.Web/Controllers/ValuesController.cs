@@ -72,15 +72,14 @@
 
             var subCatIds = data.Select(x => x.SubCategoryId).Distinct();
             var subCatsFull = this.categoryService.GetAllSubCategories().Where(x => subCatIds.Contains(x.Id)).ToList();
-            var localSubCats = this.categoryService.LocalizeSubCats(subCatsFull);
-            var subCats = subCatsFull.Select(x => new { x.Name, x.Image, x.CategoryId, x.Id }).ToList();
+            var localSubCats = this.categoryService.LocalizeSubCats(subCatsFull, userLang);
+            var subCats = localSubCats.Select(x => new { x.Name, x.Image, x.CategoryId, x.Id }).ToList();
             var catsAll = this.categoryService.GetAllFullCategories();
 
             var cats = (from s in subCatsFull
                         from c in catsAll
                         where c.SubCategories.Contains(s)
                         select new { c.Name, c.Image, c.Id }).Distinct();
-
             return new JsonResult(new { data, cats, subCats, lastUpdated, longTimestamp });
         }
 

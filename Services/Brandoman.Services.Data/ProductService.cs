@@ -14,6 +14,7 @@
     using Brandoman.Data.Models.ViewModels;
     using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Mapping;
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -221,12 +222,14 @@
 
         public TranslationViewModel GetTranslationById(int id)
         {
+            var sanitizer = new HtmlSanitizer();
+
             var translation = this.translationRepository.All().FirstOrDefault(x => x.Id == id);
             var result = new TranslationViewModel
             {
                 Id = translation.Id,
-                Translation = translation.Text,
-                TitleTranslation = translation.Title,
+                Translation = sanitizer.Sanitize(translation.Text),
+                TitleTranslation = sanitizer.Sanitize(translation.Title),
                 Active = translation.Active,
             };
 
@@ -236,12 +239,14 @@
         public TranslationViewModel GetNewTranslation(int cat, int productId, int? id, Lang lang, Product product, string subCategory)
         {
             var translation = new TranslationViewModel();
+            var sanitizer = new HtmlSanitizer();
+
             if (id != null)
             {
                 translation = this.GetTranslationById((int)id);
                 translation.IsUpdate = true;
-                translation.Text = product.Details;
-                translation.Title = product.Name;
+                translation.Text = sanitizer.Sanitize(product.Details);
+                translation.Title = sanitizer.Sanitize(product.Name);
                 translation.Lang = lang;
                 translation.SubCategory = subCategory;
                 translation.SubCategoryId = cat;

@@ -5,7 +5,7 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
-    using Brandoman.Data.Common.Models;
+    using Brandoman.Common;
     using Brandoman.Data.Models;
     using Brandoman.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,8 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
 
-    [AllowAnonymous]
+    [Authorize(Roles = GlobalConstants.LocalAdministratorRoleName)]
+
 #pragma warning disable SA1649 // File name should match first type name
     public class RegisterModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name

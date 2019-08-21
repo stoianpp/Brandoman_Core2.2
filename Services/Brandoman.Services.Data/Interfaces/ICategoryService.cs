@@ -34,6 +34,6 @@
 
         bool UpdateSubCategoryTranslation(SubCategoryLang subCategoryTranslation);
 
-        List<SubCategory> LocalizeSubCats(List<SubCategory> subCats);
+        List<SubCategory> LocalizeSubCats(List<SubCategory> subCats, Lang lang);
     }
 }
