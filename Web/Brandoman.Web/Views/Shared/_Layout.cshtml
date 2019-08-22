@@ -42,7 +42,8 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        @*@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        @*
+                        @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                         <li class="nav-item dropdown">
                             <a class="nav-link text-light dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-area="" asp-controller="" asp-action="">
@@ -51,11 +52,15 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateBase">Update Base</a>
-                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update English</a>
-                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" lang="en">Update Bulgarian</a>
+                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" asp-route-lang="en">Update English</a>
+                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" asp-route-lang="bg">Update Bulgarian</a>
+                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" asp-route-lang="rs">Update Serbian</a>
+                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" asp-route-lang="ro">Update Romanian</a>
+                                <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Home" asp-action="UpdateLanguage" asp-route-lang="pl">Update Poland</a>
                             </div>
                         </li>
-                        }*@
+                        }
+                        *@
 
                         @if (User.Identity.IsAuthenticated)
                         {

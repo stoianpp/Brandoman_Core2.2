@@ -73,5 +73,12 @@
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() => this.View();
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public ActionResult UpdateLanguage(string lang)
+        {
+            this.productService.UpdateLanguage(lang);
+            return this.Redirect("/");
+        }
     }
 }

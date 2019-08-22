@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
 
     public class ProductService : IProductService
     {
@@ -53,6 +55,11 @@
             }
 
             return viewModels;
+        }
+
+        public IQueryable<ProductLang> GetAllTranslations()
+        {
+            return this.translationRepository.All();
         }
 
         public IQueryable<LocalAdminIndexViewModel> GetAllLocalAdminActiveProducts(int active_subCategory, Lang language)
@@ -121,6 +128,73 @@
 
             await this.productRepository.AddAsync(product);
             this.productRepository.SaveChanges();
+        }
+
+        public async void UpdateLanguage(string lang)
+        {
+            var uri = new Uri("http://backend.wilkinson-sword.com.pl/data/products");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            string result = string.Empty;
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                result = reader.ReadToEnd();
+
+                dynamic json = JsonConvert.DeserializeObject(result);
+
+                Lang currentLang = Lang.Slovakian;
+                switch (lang)
+                {
+                    case "en": currentLang = Lang.English; break;
+                    case "bg": currentLang = Lang.Bulgarian; break;
+                    case "rs": currentLang = Lang.Serbian; break;
+                    case "ro": currentLang = Lang.Romanian; break;
+                    case "pl": currentLang = Lang.Polish; break;
+                }
+
+                foreach (var item in json[lang].products)
+                {
+                    string curruntProduct = item.ToString();
+                    var record = JsonConvert.DeserializeObject<ProductFromDatabaseViewModel>(curruntProduct);
+                    try
+                    {
+                        var product = this.GetAll().FirstOrDefault(x => x.Name == record.name && x.IsDeleted == false).Id;
+                        var translation = this.GetAllTranslations().FirstOrDefault(x => x.Title == record.name && x.ProductId == product && x.Lang == currentLang);
+
+                        if (translation == null)
+                        {
+                            var transl = new TranslationViewModel
+                            {
+                                ProductId = product,
+                                Translation = record.content + "<br>" + record.characteristics[0],
+                                Lang = currentLang,
+                                TitleTranslation = record.name,
+                            };
+
+                            await this.SaveTranslationAsync(transl);
+                        }
+                        else
+                        {
+                            var transl = new TranslationViewModel
+                            {
+                                Id = translation.Id,
+                                Translation = record.content + "<br>" + record.characteristics[0],
+                                ProductId = product,
+                                Lang = currentLang,
+                                TitleTranslation = record.name,
+                            };
+                            translation.Text = record.content + "<br>" + record.characteristics[0];
+                            this.UpdateTranslation(transl);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
         }
 
         public async Task SaveTranslationAsync(TranslationViewModel translationIn)

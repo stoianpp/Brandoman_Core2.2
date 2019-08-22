@@ -13,6 +13,8 @@
     {
         IQueryable<AdminIndexViewModel> GetAllAdminActiveProducts(int active_subCategory);
 
+        IQueryable<ProductLang> GetAllTranslations();
+
         IQueryable<LocalAdminIndexViewModel> GetAllLocalAdminActiveProducts(int active_subCategory, Lang userLanguage);
 
         Product GetProductById(int id);
@@ -20,6 +22,8 @@
         Task SaveProductAsync(Product product, IFormFile imageName);
 
         Task SaveTranslationAsync(TranslationViewModel translationIn);
+
+        void UpdateLanguage(string lang);
 
         IQueryable<Product> GetAll();
 
