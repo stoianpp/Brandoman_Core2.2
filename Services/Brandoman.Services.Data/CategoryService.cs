@@ -10,21 +10,25 @@
     using Brandoman.Data.Models.ViewModels;
     using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Mapping;
+    using Ganss.XSS;
 
     public class CategoryService : ICategoryService
     {
         private readonly IDeletableEntityRepository<Category> categories;
         private readonly IDeletableEntityRepository<SubCategory> subCategories;
         private readonly IDeletableEntityRepository<SubCategoryLang> subCategoryLangs;
+        private readonly IHtmlSanitizer sanitizer;
 
         public CategoryService(
             IDeletableEntityRepository<Category> categoriesIn,
             IDeletableEntityRepository<SubCategory> subCategoriesIn,
-            IDeletableEntityRepository<SubCategoryLang> subCategoryLangs)
+            IDeletableEntityRepository<SubCategoryLang> subCategoryLangs,
+            IHtmlSanitizer sanitizer)
         {
             this.categories = categoriesIn;
             this.subCategories = subCategoriesIn;
             this.subCategoryLangs = subCategoryLangs;
+            this.sanitizer = sanitizer;
         }
 
         public IQueryable<CategoryDropDownViewModel> GetAllCategories()
@@ -104,6 +108,12 @@
                         SubCategoryId = subCategory.Id,
                     });
                 }
+            }
+
+            foreach (var item in result)
+            {
+                item.LangText = this.sanitizer.Sanitize(item.LangText);
+                item.Name = this.sanitizer.Sanitize(item.Name);
             }
 
             return result;

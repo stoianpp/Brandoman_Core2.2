@@ -10,6 +10,7 @@
     using Brandoman.Data.Models;
     using Brandoman.Data.Models.ViewModels;
     using Brandoman.Services.Data.Interfaces;
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -22,20 +23,23 @@
         private readonly ICategoryService categories;
         private readonly IMapper mapper;
         private readonly IProductService products;
+        private readonly IHtmlSanitizer sanitizer;
 
         public ProductController(
             ICategoryService categoriesIn,
             IMapper mapperIn,
-            IProductService productsIn)
+            IProductService productsIn,
+            IHtmlSanitizer sanitizer)
         {
             this.categories = categoriesIn;
             this.mapper = mapperIn;
             this.products = productsIn;
+            this.sanitizer = sanitizer;
         }
 
         [Route("Product/AddEditRecord")]
-        [HttpGet("{cat,id}")]
-        public IActionResult AddEditRecord(int cat, int? id)
+        [HttpGet("{cat,subCat,id}")]
+        public IActionResult AddEditRecord(int cat, int subCat, int? id)
         {
             var subCategories = this.categories.GetAllSubCategories(cat);
             var product = new ProductViewModel();
@@ -44,9 +48,9 @@
             {
                 this.ViewBag.Message = "Edit Product";
                 var currentProduct = this.products.GetProductById((int)id);
-                product.Name = currentProduct.Name;
+                product.Name = this.sanitizer.Sanitize(currentProduct.Name);
                 product.Details = currentProduct.Details;
-                product.SubCategoryId = currentProduct.SubCategoryId;
+                product.SubCategoryId = subCat;
                 product.Image = currentProduct.Image;
 
                 product.IsUpdate = true;

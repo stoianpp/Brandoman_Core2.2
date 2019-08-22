@@ -7,7 +7,6 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using AutoMapper;
     using Brandoman.Data.Common.Models;
     using Brandoman.Data.Common.Repositories;
     using Brandoman.Data.Models;
@@ -24,18 +23,18 @@
         private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly IDeletableEntityRepository<ProductLang> translationRepository;
         private readonly IUserStore<ApplicationUser> userStore;
-        private readonly IMapper mapper;
+        private readonly IHtmlSanitizer sanitizer;
 
         public ProductService(
             IDeletableEntityRepository<Product> products,
             IDeletableEntityRepository<ProductLang> translations,
             IUserStore<ApplicationUser> userStore,
-            IMapper mapperIn)
+            IHtmlSanitizer sanitizer)
         {
             this.productRepository = products;
             this.translationRepository = translations;
             this.userStore = userStore;
-            this.mapper = mapperIn;
+            this.sanitizer = sanitizer;
         }
 
         public IQueryable<Product> GetAll()
@@ -47,6 +46,11 @@
         {
             var products = this.productRepository.All().Where(x => x.SubCategoryId == active_subCategory).OrderBy(x => x.Order);
             var viewModels = products.To<AdminIndexViewModel>();
+            foreach (var item in viewModels)
+            {
+                item.Details = this.sanitizer.Sanitize(item.Details);
+                item.Name = this.sanitizer.Sanitize(item.Name);
+            }
 
             return viewModels;
         }
@@ -86,6 +90,12 @@
                                                     Text = x.Text,
                                                     Image = allProducts.FirstOrDefault(y => y.Id == x.ProductId).Image,
                                                 });
+            foreach (var item in result)
+            {
+                item.Text = this.sanitizer.Sanitize(item.Text);
+                item.Title = this.sanitizer.Sanitize(item.Title);
+            }
+
             return result;
         }
 
@@ -222,14 +232,12 @@
 
         public TranslationViewModel GetTranslationById(int id)
         {
-            var sanitizer = new HtmlSanitizer();
-
             var translation = this.translationRepository.All().FirstOrDefault(x => x.Id == id);
             var result = new TranslationViewModel
             {
                 Id = translation.Id,
-                Translation = sanitizer.Sanitize(translation.Text),
-                TitleTranslation = sanitizer.Sanitize(translation.Title),
+                Translation = translation.Text,
+                TitleTranslation = translation.Title,
                 Active = translation.Active,
             };
 
@@ -239,14 +247,13 @@
         public TranslationViewModel GetNewTranslation(int cat, int productId, int? id, Lang lang, Product product, string subCategory)
         {
             var translation = new TranslationViewModel();
-            var sanitizer = new HtmlSanitizer();
 
             if (id != null)
             {
                 translation = this.GetTranslationById((int)id);
                 translation.IsUpdate = true;
-                translation.Text = sanitizer.Sanitize(product.Details);
-                translation.Title = sanitizer.Sanitize(product.Name);
+                translation.Text = product.Details;
+                translation.Title = product.Name;
                 translation.Lang = lang;
                 translation.SubCategory = subCategory;
                 translation.SubCategoryId = cat;
@@ -256,8 +263,8 @@
 
             translation.IsUpdate = false;
             translation.Product = product;
-            translation.Title = product.Name;
-            translation.TitleTranslation = product.Name;
+            translation.Title = this.sanitizer.Sanitize(product.Name);
+            translation.TitleTranslation = this.sanitizer.Sanitize(product.Name);
             translation.Text = product.Details;
             translation.Lang = lang;
             translation.SubCategory = subCategory;

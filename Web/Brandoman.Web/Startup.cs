@@ -21,6 +21,7 @@
     using Brandoman.Services.Mapping;
     using Brandoman.Services.Messaging;
     using Brandoman.Web.ViewModels;
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -157,6 +158,7 @@
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
             services.AddTransient<ClaimsPrincipal>(
                 s => s.GetService<IHttpContextAccessor>().HttpContext.User);
         }

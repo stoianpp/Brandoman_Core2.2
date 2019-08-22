@@ -51,7 +51,7 @@
                                             <td style="text-align: center">@Data.SubCategory</td>
                                             <td style="text-align: center">@details</td>
                                             <td class="text-center" style="text-align: center">
-                                                <button asp-controller="Product" asp-action="AddEditRecord" asp-route-cat=@ViewBag.CurrentSubCategoryId asp-route-id=@Data.Id class="btn-bootstrap-dialog btn edit"></button>
+                                                <button asp-controller="Product" asp-action="AddEditRecord" asp-route-cat=@ViewBag.CurrentCategoryId asp-route-subCat=@ViewBag.CurrentSubCategoryId asp-route-id=@Data.Id class="btn-bootstrap-dialog btn edit"></button>
                                                 <input type=button class="btn-bootstrap-dialog1 btn delete delete-btn" id=@Data.Id />
                                             </td>
                                         </tr>
