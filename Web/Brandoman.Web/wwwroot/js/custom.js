@@ -5,7 +5,7 @@
     });
 
 
-    $('tbody').sortable({
+    $('#TblProducts tbody').sortable({
         //items: 'tr:not(tr:first-child)',
         cursor: 'move',
         axis: 'y',
