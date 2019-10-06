@@ -75,6 +75,7 @@
                 product.Id = translation.Id;
                 product.Active = translation.Active;
                 product.Title = translation.Title ?? product.Name;
+                product.LangTextLastUpdate = translation.ModifiedOn ?? translation.CreatedOn;
             }
 
             foreach (var product in adminProductViewModels)

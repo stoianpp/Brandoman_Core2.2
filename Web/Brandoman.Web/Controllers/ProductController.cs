@@ -94,9 +94,12 @@
                         return this.RedirectToAction("Index", "Home", new { active_subCategory = productVM.SubCategoryId, toastr = "The record has been updated successfully" });
 
                         // Code for pictures uploading of SubCategories through product edit window
-                        // var cat1 = _subCategories.GetAll().Where(x => x.Id == 4).FirstOrDefault();
+                        // var cat1 = this.categories.GetAllSubCategories().Where(x => x.Id == 12).FirstOrDefault();
+                        // BinaryReader b = new BinaryReader(imageName.OpenReadStream());
+                        // byte[] binData = b.ReadBytes((int)imageName.Length);
                         // cat1.Image = binData;
-                        // _subCategories.Update(cat1);
+                        // this.subCategories.Update(cat1);
+                        // this.subCategories.SaveChanges();
                     }
                     catch
                     {

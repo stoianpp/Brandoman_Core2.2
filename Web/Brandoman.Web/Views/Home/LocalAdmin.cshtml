@@ -5,6 +5,7 @@
 
 @if (User.IsInRole(GlobalConstants.LocalAdministratorRoleName))
 {
+    var hasUpdates = false;
     <div class="container">
         <form asp-controller="" asp-action="" style="padding-top:5px; min-height:600px">
             <div class="row">
@@ -45,9 +46,19 @@
                                     if (Data.LangText != null && Data.LangText.Length > 0) translation = "Available text with " + @Data.LangText.Length + " symbols";
 
                                     <tr>
-                                        <td style="text-align: center">@Data.Name</td>
-                                        <td style="text-align: center">@details</td>
-                                        <td style="text-align: center">@translation</td>
+                                        @if (Data.DetailsLastUpdate != null && Data.LangTextLastUpdate < Data.DetailsLastUpdate && Data.LangText != null && Data.LangText.Length > 0)
+                                        {
+                                            hasUpdates = true;
+                                            <td style="text-align: center; color: red" title='The product was last updated on "@Data.DetailsLastUpdate" while local translation on "@Data.LangTextLastUpdate"'>@Data.Name</td>
+                                            <td style="text-align: center; color: red" title='The product was last updated on "@Data.DetailsLastUpdate" while local translation on "@Data.LangTextLastUpdate"'>@details</td>
+                                            <td style="text-align: center; color: red" title='The product was last updated on "@Data.DetailsLastUpdate" while local translation on "@Data.LangTextLastUpdate"'>@translation</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align: center">@Data.Name</td>
+                                            <td style="text-align: center">@details</td>
+                                            <td style="text-align: center">@translation</td>
+                                        }
                                         <td style="text-align: center">
                                             @if (Data.Active)
                                             {
@@ -65,6 +76,10 @@
                                 }
                             </tbody>
                         </table>
+                        @if (hasUpdates == true)
+                        {
+                            <p style="color: red"><i>&nbsp;* Needs local update. Mouse over the red text above to see when product was last updated</i></p>
+                        }
                     </div>
                 </div>
             </div>

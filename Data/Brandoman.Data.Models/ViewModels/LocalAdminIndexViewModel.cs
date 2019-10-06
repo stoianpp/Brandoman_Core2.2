@@ -1,5 +1,6 @@
 ﻿namespace Brandoman.Data.Models.ViewModels
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     using AutoMapper;
@@ -19,7 +20,11 @@
 
         public string LangText { get; set; }
 
+        public DateTime LangTextLastUpdate { get; set; }
+
         public string Details { get; set; }
+
+        public DateTime? DetailsLastUpdate { get; set; }
 
         public bool Active { get; set; }
 
@@ -36,6 +41,7 @@
             configuration.CreateMap<Product, LocalAdminIndexViewModel>()
                 .ForMember(x => x.SubCategory, opt => opt.MapFrom(x => x.SubCategory.Name))
                 .ForMember(x => x.ProductId, opt => opt.MapFrom(x => x.Id))
+                .ForMember(x => x.DetailsLastUpdate, opt => opt.MapFrom(x => x.ModifiedOn))
                 .ForMember(x => x.Id, opt => opt.Ignore());
         }
     }
