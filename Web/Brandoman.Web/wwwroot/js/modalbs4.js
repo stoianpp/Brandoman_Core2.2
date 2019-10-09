@@ -103,3 +103,15 @@ $(".delete-user-btn").click(function (e) {
         }
     });
 })
+
+$("#confirmBtnSubCatGlobal").click(function (e) {
+    e.preventDefault();
+    var formBase = $("form").has("#confirmBtnSubCatGlobal");
+    confirmDialog("Save changes?", (ans) => {
+        if (ans) {
+            formBase.submit();
+        } else {
+            window.location.reload();
+        }
+    });
+})

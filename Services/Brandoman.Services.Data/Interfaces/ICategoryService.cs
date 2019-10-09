@@ -7,6 +7,7 @@
     using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
     using Brandoman.Data.Models.ViewModels;
+    using Microsoft.AspNetCore.Http;
 
     public interface ICategoryService
     {
@@ -33,6 +34,10 @@
         SubCategoryLang GetSubCategoryTranslation(int subCategoryLangId);
 
         bool UpdateSubCategoryTranslation(SubCategoryLang subCategoryTranslation);
+
+        Task SaveSubCategoryAsync(SubCategory subCategory, IFormFile imageName);
+
+        bool UpdateSubCategory(SubCategoryAdminIndexViewModel modelIn, IFormFile imageName);
 
         List<SubCategory> LocalizeSubCats(List<SubCategory> subCats, Lang lang);
     }

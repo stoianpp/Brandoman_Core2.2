@@ -1,0 +1,78 @@
+﻿@using Brandoman.Data.Models.ViewModels
+@using Brandoman.Common
+
+@{
+    Layout = "~/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@model IQueryable<SubCategoryAdminIndexViewModel>
+
+@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+<div class="container">
+    <form asp-area="Administration" asp-controller="Category" asp-action="AddEditGlobalCategories" style="padding-top:5px; min-height:600px">
+        <div class="row">
+            <div class="panel panel-default panel-table" style="width: 100%">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col col-xs-6">
+                            <h2 class="panel-title">@ViewBag.Title</h2><br />
+                        </div>
+                        <div class="col col-xs-6 text-right">
+                            <button asp-area="Administration" asp-controller="Category" asp-action="AddEditGlobalCategories" class="btn-bootstrap-dialog btn btn-success" style="margin-top: 5px">New Sub Category</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding-bottom:1px">
+                    <table id="TblCategoryTranslation" class="table table-striped table-bordered table-list">
+                        <thead>
+                            <tr class="titleTr">
+                                <th class="text-center">
+                                    Category
+                                </th>
+                                <th class="text-center">
+                                    Sub Category
+                                </th>
+                                <th class="text-center" width="30">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var data in Model)
+                                {
+                            <tr>
+                                <td style="text-align: left">@data.Category</td>
+                                <td style="text-align: left">@data.Name</td>
+                                <td class="text-center" style="text-align: center">
+                                    <button asp-controller="Category"
+                                            asp-action="AddEditGlobalCategories"
+                                            asp-route-modelIn.Id=@data.Id
+                                            asp-route-modelIn.Name=@data.Name
+                                            asp-route-modelIn.CategoryId=@data.CategoryId
+                                            asp-route-modelIn.Category=@data.Category
+                                            class="btn-bootstrap-dialog btn edit">
+                                    </button>
+                                </td>
+                            </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+}
+
+@section Scripts
+{
+    <script>
+       $(function(){
+           var text = "@ViewBag.Toastr";
+           if (text != null && text.length > 0) {
+                toastr.info("@ViewBag.Toastr");
+           }
+       })
+    </script>
+}

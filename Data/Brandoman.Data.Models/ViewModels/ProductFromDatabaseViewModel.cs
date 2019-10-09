@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Brandoman.Data.Models.ViewModels
+﻿namespace Brandoman.Data.Models.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class ProductFromDatabaseViewModel
     {
         public int id { get; set; }

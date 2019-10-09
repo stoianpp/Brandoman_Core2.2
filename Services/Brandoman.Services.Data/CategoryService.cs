@@ -1,6 +1,7 @@
 ﻿namespace Brandoman.Services.Data
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@
     using Brandoman.Services.Data.Interfaces;
     using Brandoman.Services.Mapping;
     using Ganss.XSS;
+    using Microsoft.AspNetCore.Http;
 
     public class CategoryService : ICategoryService
     {
@@ -156,6 +158,56 @@
             }
 
             return subCats;
+        }
+
+        public async Task SaveSubCategoryAsync(SubCategory subCategory, IFormFile imageName)
+        {
+            if (imageName != null && imageName.Length > 0)
+            {
+                BinaryReader b = new BinaryReader(imageName.OpenReadStream());
+                byte[] binData = b.ReadBytes((int)imageName.Length);
+                subCategory.Image = binData;
+            }
+            else
+            {
+                string file = Directory.GetCurrentDirectory() + @"\wwwroot\Images\missing.jpg";
+                byte[] image = File.ReadAllBytes(file);
+                subCategory.Image = image;
+            }
+
+            await this.subCategories.AddAsync(subCategory);
+            this.subCategories.SaveChanges();
+        }
+
+        public bool UpdateSubCategory(SubCategoryAdminIndexViewModel modelIn, IFormFile imageName)
+        {
+            bool result;
+            try
+            {
+                var subCategory = this.subCategories.All().FirstOrDefault(x => x.Id == (int)modelIn.Id);
+                subCategory.Name = modelIn.Name;
+                subCategory.CategoryId = modelIn.CategoryId;
+
+                if (imageName != null && imageName.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        imageName.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        subCategory.Image = fileBytes;
+                    }
+                }
+
+                this.subCategories.Update(subCategory);
+                this.subCategories.SaveChanges();
+                result = true;
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }

@@ -1,0 +1,71 @@
+﻿@using Brandoman.Data.Models.ViewModels
+@using Brandoman.Services.Data.Interfaces
+
+@model SubCategoryAdminIndexViewModel
+
+@inject ICategoryService  catService
+
+@{
+    Layout = "~/Views/Shared/_LayoutEdit.cshtml";
+    List<SelectListItem> categories = catService.GetAllCategories().Select(x => new SelectListItem
+    {
+        Value = Convert.ToString(x.Id),
+        Text = x.Name
+    }).ToList();
+}
+
+<form asp-area="Administration" asp-controller="Category" asp-action="AddEditGlobalCategory" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <dir class="row">
+        <div class="col-md-12">
+            <h2>@ViewBag.Title</h2>
+        </div>
+    </dir>
+    <hr />
+    <dir class="row">
+        <div class="col-md-12" style="background-color: lightgray">
+            <input asp-for="Id" type="hidden" />
+            <div class="modal-body container" width="100%">
+                <div class="form-horizontal" style="padding-bottom:5px; padding-top:30px">
+                    <div class="form-group row">
+                        <label asp-for="CategoryId" class="control-label col-md-12"></label>
+                        <div class="col-md-12">
+                            <select asp-for="CategoryId" asp-items=@categories class="form-control my-control"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Name" class="control-label col-md-12"></label>
+                        <div class="col-md-12">
+                            <input asp-for="Name" class="form-control my-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Image" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+                            <input asp-for="Image" type="file" name="imageName" accept=".jpg, .jpeg, .png" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-9 col-lg-offset-3">
+                            @if (Model.Id != null && Model.Image != null)
+                            {
+                                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" width="160" height="160" />
+                            }
+                            else
+                            {
+                                <img src="~/Images/missing.jpg" width="160" height="160" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dir>
+    <div class="modal-footer" style="padding:15px">
+        <div class="form-group row offset-md-9">
+            <button type="submit" class="btn btn-primary my-btn" id="confirmBtnSubCatGlobal">Save</button>
+        </div>
+    </div>
+</form>
+
