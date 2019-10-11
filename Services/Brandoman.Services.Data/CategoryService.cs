@@ -209,5 +209,21 @@
 
             return result;
         }
+
+        public async Task<bool> DeleteSubCategory(SubCategory toDelete)
+        {
+            var result = true;
+            try
+            {
+                this.subCategories.Delete(toDelete);
+                await this.subCategories.SaveChangesAsync();
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
     }
 }

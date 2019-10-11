@@ -1,6 +1,7 @@
 ﻿namespace Brandoman.Web.Areas.Administration.Controllers
 {
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Brandoman.Common;
     using Brandoman.Data.Models;
@@ -186,6 +187,30 @@
 
             this.ViewBag.Message = modelIn.Id != 0 ? "Edit Category" : "New Category";
             return this.View("AddEditGlobalCategories", modelIn);
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        [AllowAnonymous]
+        public async Task<JsonResult> DeleteSubCategory(int id)
+        {
+            var subCategoryActiveProducts = this.productService.GetAll().Where(x => x.SubCategoryId == id);
+            if (subCategoryActiveProducts.Count() > 0)
+            {
+                return this.Json(this.Url.Action("GlobalCategories", "Category", new { toastr = "ERROR: Delete all Sub Category products first!" }));
+            }
+
+            try
+            {
+                var subCat = this.categoryService.GetAllSubCategories().FirstOrDefault(x => x.Id == id);
+                await this.categoryService.DeleteSubCategory(subCat);
+            }
+            catch
+            {
+                return this.Json(this.Url.Action("GlobalCategories", "Category", new { toastr = "ERROR: Category hasn't been deleted. Try again!" }));
+            }
+
+            return this.Json(this.Url.Action("GlobalCategories", "Category", new { toastr = "Category has been successfully deleted." }));
         }
     }
 }

@@ -40,5 +40,7 @@
         bool UpdateSubCategory(SubCategoryAdminIndexViewModel modelIn, IFormFile imageName);
 
         List<SubCategory> LocalizeSubCats(List<SubCategory> subCats, Lang lang);
+
+        Task<bool> DeleteSubCategory(SubCategory toDelete);
     }
 }
