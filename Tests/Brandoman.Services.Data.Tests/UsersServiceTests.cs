@@ -14,6 +14,7 @@
     using Brandoman.Services.Mapping;
     using Brandoman.Web.ViewModels;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Xunit;
 
@@ -32,7 +33,7 @@
                                                         }.AsQueryable());
 
             AutoMapperConfig.RegisterMappings(typeof(AdminIndexViewModel).GetTypeInfo().Assembly, typeof(ErrorViewModel).GetTypeInfo().Assembly);
-            var service = new UserService(repository.Object);
+            var service = new UserService(repository.Object, null);
             var result = service.GetUsersByLanguage(Brandoman.Data.Common.Models.Lang.Albanian).Count();
             Assert.Equal(2, result);
         }
@@ -47,7 +48,7 @@
                                                             new ApplicationUser(),
                                                             new ApplicationUser(),
                                                         }.AsQueryable());
-            var service = new UserService(repository.Object);
+            var service = new UserService(repository.Object, null);
             Assert.Equal(3, service.GetUsersNumber());
             repository.Verify(x => x.All(), Times.Once);
         }
@@ -65,7 +66,7 @@
             await dbContext.SaveChangesAsync();
 
             var repository = new EfDeletableEntityRepository<ApplicationUser>(dbContext);
-            var service = new UserService(repository);
+            var service = new UserService(repository, null);
             var count = service.GetUsersNumber();
             Assert.Equal(3, count);
         }

@@ -4,9 +4,11 @@
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Brandoman.Common;
+    using Brandoman.Data.Common.Models;
     using Brandoman.Services;
     using Brandoman.Services.Data.Interfaces;
     using ClosedXML.Excel;
@@ -38,6 +40,28 @@
             this.ViewBag.Language = userLang;
 
             return this.View(users);
+        }
+
+        [AllowAnonymous]
+        public IActionResult GlobalIndex(string toastr)
+        {
+            var userId = this.GetUserId();
+            var res = this.userService.GetRolesForCurrentUser(userId);
+            var isAdministrator = res.Contains(GlobalConstants.AdministratorRoleName);
+
+            if (isAdministrator)
+            {
+                var languages = Enum.GetValues(typeof(Lang)).Cast<Lang>();
+                var users = this.userService.GetLocalAdminUsers();
+
+                this.ViewBag.Title = "Local Administrators";
+                this.ViewBag.Toastr = toastr;
+                this.ViewBag.Languages = languages;
+
+                return this.View(users);
+            }
+
+            return this.Unauthorized();
         }
 
         [HttpPost]
@@ -74,31 +98,34 @@
 
             var logsExtract = this.loginService.All().Where(x => x.UserLang == userLang && x.CreatedOn >= startDate && x.CreatedOn <= endDate).ToList();
 
-            var wb = new XLWorkbook();
-            var ws = wb.Worksheets.Add("Log Report");
-            ws.Cell("A1").Value = "User Email";
-            ws.Cell("B1").Value = "Login Time";
-            for (int i = 0; i < logsExtract.Count; i++)
+            using (var wb = new XLWorkbook())
             {
-                string homeTeam = logsExtract[i].UserName;
-                string score = logsExtract[i].CreatedOn.ToString();
-                ws.Cell("A" + (i + 2)).Value = homeTeam;
-                ws.Cell("B" + (i + 2)).Value = score;
+                var ws = wb.Worksheets.Add("Log Report");
+                ws.Cell("A1").Value = "User Email";
+                ws.Cell("B1").Value = "Login Time";
+                for (int i = 0; i < logsExtract.Count; i++)
+                {
+                    string homeTeam = logsExtract[i].UserName;
+                    string score = logsExtract[i].CreatedOn.ToString();
+                    ws.Cell("A" + (i + 2)).Value = homeTeam;
+                    ws.Cell("B" + (i + 2)).Value = score;
+                }
+
+                ws.Range("A1:B1").Style.Font.Bold = true;
+                ws.Columns().AdjustToContents();
+
+                MemoryStream fs = new MemoryStream();
+                wb.SaveAs(fs);
+                fs.Position = 0;
+                string my_Name = WebUtility.UrlEncode("Log Report: " + DateTime.Now.ToShortDateString() + ".xlsx");
+                MemoryStream stream = fs;
+
+                this.Response.Clear();
+                this.Response.Headers.Add("content-disposition", "attachment; filename=" + my_Name);
+                this.Response.ContentType = "application/vnd.ms-excel";
+                this.Response.Body.WriteAsync(stream.ToArray());
             }
 
-            ws.Range("A1:B1").Style.Font.Bold = true;
-            ws.Columns().AdjustToContents();
-
-            MemoryStream fs = new MemoryStream();
-            wb.SaveAs(fs);
-            fs.Position = 0;
-            string my_Name = WebUtility.UrlEncode("Log Report: " + DateTime.Now.ToShortDateString() + ".xlsx");
-            MemoryStream stream = fs;
-
-            this.Response.Clear();
-            this.Response.Headers.Add("content-disposition", "attachment; filename=" + my_Name);
-            this.Response.ContentType = "application/vnd.ms-excel";
-            this.Response.Body.WriteAsync(stream.ToArray());
             return;
         }
     }
