@@ -1,21 +1,25 @@
 ﻿namespace Brandoman.Web.Areas.Identity.Pages.Account
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
     using Brandoman.Common;
+    using Brandoman.Data;
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
     using Brandoman.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
 
-    [Authorize(Roles = GlobalConstants.LocalAdministratorRoleName)]
+    [Authorize(Roles = GlobalConstants.LocalAdministratorRoleName + "," + GlobalConstants.AdministratorRoleName)]
 
 #pragma warning disable SA1649 // File name should match first type name
     public class RegisterModel : PageModel
@@ -34,11 +38,11 @@
             IEmailSender emailSender,
             IProductService productService)
         {
-            this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
             this.productService = productService;
+            this.userManager = userManager;
         }
 
         [BindProperty]
@@ -49,6 +53,7 @@
         public void OnGet(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl;
+            var a = this.HttpContext.Request.Query.Keys;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -58,11 +63,21 @@
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var userLang = this.productService.GetCurrentUserLanguage(userId);
+                if (!string.IsNullOrEmpty(this.Input.Lang))
+                {
+                    userLang = (Lang)Enum.Parse(typeof(Lang), this.Input.Lang);
+                }
+
                 var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email, Lang = userLang };
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User created a new account with password.");
+
+                    if (!string.IsNullOrEmpty(this.Input.Lang))
+                    {
+                        await this.userManager.AddToRoleAsync(user, "LocalAdministrator");
+                    }
 
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = this.Url.Page(
@@ -79,7 +94,12 @@
                     // await this.signInManager.SignInAsync(user, isPersistent: false);
 
                     // hardcoded return url
-                    return this.LocalRedirect("/Administration/User/Index");
+                    if (!string.IsNullOrEmpty(this.Input.Lang))
+                    {
+                        return this.LocalRedirect("/Administration/User/GlobalIndex?toastr=User has been created.");
+                    }
+
+                    return this.LocalRedirect("/Administration/User/Index?toastr=User has been created.");
                 }
 
                 foreach (var error in result.Errors)
@@ -98,6 +118,9 @@
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Display(Name = "Language")]
+            public string Lang { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]

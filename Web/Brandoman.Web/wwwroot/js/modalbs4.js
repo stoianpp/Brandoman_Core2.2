@@ -99,7 +99,7 @@ $(".delete-cat-btn").click(function (e) {
                 }
             });
         } else {
-            window.location.href = "/";
+            window.location.href = "/Category/GlobalCategories";
         }
     });
 })
@@ -119,7 +119,7 @@ $(".delete-user-btn").click(function (e) {
                 }
             });
         } else {
-            window.location.href = "User/Index";
+            window.location.href = "/Administration/User/Index";
         }
     });
 })

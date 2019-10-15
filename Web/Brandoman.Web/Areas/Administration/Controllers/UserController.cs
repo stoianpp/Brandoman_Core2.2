@@ -68,6 +68,12 @@
         [IgnoreAntiforgeryToken]
         public async Task<JsonResult> DeleteUser(string id)
         {
+            var userId = this.GetUserId();
+            var res = this.userService.GetRolesForCurrentUser(userId);
+            var isAdministrator = res.Contains(GlobalConstants.AdministratorRoleName);
+
+            var returnAction = isAdministrator ? "GlobalIndex" : "Index";
+
             try
             {
                 var user = this.userService.GetUserById(id);
@@ -75,10 +81,10 @@
             }
             catch
             {
-                return this.Json(this.Url.Action("Index", "User", new { toastr = "User hasn't been deleted. Try again." }));
+                return this.Json(this.Url.Action(returnAction, "User", new { toastr = "User hasn't been deleted. Try again." }));
             }
 
-            return this.Json(this.Url.Action("Index", "User", new { toastr = "User has been successfully deleted." }));
+            return this.Json(this.Url.Action(returnAction, "User", new { toastr = "User has been successfully deleted." }));
         }
 
         [HttpGet]

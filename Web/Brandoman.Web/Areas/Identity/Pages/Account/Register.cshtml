@@ -1,5 +1,17 @@
 ﻿@page
 @model RegisterModel
+@using Brandoman.Data.Common.Models
+@using Brandoman.Common
+
+@{
+    var langs = Enum.GetValues(typeof(Lang)).Cast<Lang>();
+    List<SelectListItem> languages = langs.Select(x => new SelectListItem
+    {
+        Value = x.ToString(),
+        Text = x.ToString()
+    }).ToList();
+}
+
 @{
     ViewData["Title"] = "Register";
 }
@@ -17,6 +29,14 @@
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
+            @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Lang"></label>
+                    <select asp-for="Input.Lang" asp-items=@languages class="form-control my-control"></select>
+                    <span asp-validation-for="Input.Lang" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />
