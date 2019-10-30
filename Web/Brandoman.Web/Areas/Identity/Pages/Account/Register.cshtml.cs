@@ -53,7 +53,6 @@
         public void OnGet(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl;
-            var a = this.HttpContext.Request.Query.Keys;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
