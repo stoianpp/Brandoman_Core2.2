@@ -154,7 +154,12 @@
             var subCategoryTranslation = this.subCategoryLangs.All().Where(x => x.Lang == lang);
             foreach (var translation in subCategoryTranslation)
             {
-                subCats.FirstOrDefault(x => x.Id == translation.SubCategoryId).Name = translation.LangText;
+                var res = subCats.FirstOrDefault(x => x.Id == translation.SubCategoryId);
+                if (res != null)
+                {
+                    res.Name = translation.LangText;
+                }
+
             }
 
             return subCats;

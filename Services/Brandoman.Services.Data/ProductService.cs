@@ -154,6 +154,9 @@
                     case "rs": currentLang = Lang.Serbian; break;
                     case "ro": currentLang = Lang.Romanian; break;
                     case "pl": currentLang = Lang.Polish; break;
+                    case "al": currentLang = Lang.Albanian; break;
+                    case "kv": currentLang = Lang.Kosovo; break;
+                    case "mk": currentLang = Lang.Macedonian; break;
                 }
 
                 foreach (var item in json[lang].products)
