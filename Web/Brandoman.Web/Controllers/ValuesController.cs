@@ -1,10 +1,12 @@
 ﻿namespace Brandoman.Web.Controllers
 {
+    using System;
     using System.Linq;
     using System.Security.Claims;
 
     using Brandoman.Common;
     using Brandoman.Data;
+    using Brandoman.Data.Common.Models;
     using Brandoman.Data.Models;
     using Brandoman.Services;
     using Brandoman.Services.Data.Interfaces;
@@ -64,8 +66,9 @@
             }
 
             var lastUpdated = data.First().Timestamp;
-            var longTimestamp = long.Parse(timestamp);
-            if (lastUpdated <= longTimestamp)
+            var splitInput = timestamp.ToString().Split(new char[] { ' ' });
+            var longTimestampNum = long.Parse(splitInput[0]);
+            if (lastUpdated <= longTimestampNum && (splitInput.Length > 1 && ((Lang)Enum.Parse(typeof(Lang), splitInput[1]) == userLang)))
             {
                 return this.NotFound();
             }
@@ -80,6 +83,7 @@
                         from c in catsAll
                         where c.SubCategories.Contains(s)
                         select new { c.Name, c.Image, c.Id }).Distinct();
+            var longTimestamp = longTimestampNum.ToString() + " " + userLang.ToString();
             return new JsonResult(new { data, cats, subCats, lastUpdated, longTimestamp });
         }
 

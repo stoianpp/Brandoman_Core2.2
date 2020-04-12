@@ -365,7 +365,7 @@
                        where p.ProductLanguages.Contains(l)
                        select p;
 
-            IEnumerable<AppUserViewModel> trans = prod.Select(x => new AppUserViewModel
+            IEnumerable<AppUserViewModel> trans = prod.OrderBy(x => x.Order).Select(x => new AppUserViewModel
             {
                 Name = translations.Where(y => y.Lang == lang && y.ProductId == x.Id)
                                     .FirstOrDefault()
